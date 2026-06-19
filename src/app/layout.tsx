@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ChatWidget from "@/components/ChatWidget";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 
@@ -32,6 +33,7 @@ export default function RootLayout({
           </div>
           <ScrollToTop />
           <WhatsAppButton />
+          <ChatWidget />
         </Providers>
       </body>
     </html>
