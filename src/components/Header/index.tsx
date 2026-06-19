@@ -2,17 +2,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import menuData from "./menuData";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(-1);
   const pathname = usePathname();
+  const navRef = useRef<HTMLDivElement>(null);
 
   const handleSubmenu = (index: number) => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenIndex(-1);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full">
@@ -70,9 +85,9 @@ const Header = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav ref={navRef} className="hidden items-center gap-1 lg:flex">
             {menuData.map((item, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className="relative">
                 {item.path ? (
                   <Link
                     href={item.path}
@@ -87,25 +102,29 @@ const Header = () => {
                 ) : (
                   <>
                     <button
+                      onClick={() => handleSubmenu(index)}
                       className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 rounded-md transition-colors hover:text-[#0077b6]"
                     >
                       {item.title}
-                      <svg className="h-4 w-4 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <svg className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
                       </svg>
                     </button>
                     {/* Dropdown */}
-                    <div className="invisible absolute top-full left-0 z-50 mt-1 w-64 rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                      {item.submenu?.map((sub, i) => (
-                        <Link
-                          key={i}
-                          href={sub.path}
-                          className="block rounded-lg px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-blue-50 hover:text-[#0077b6]"
-                        >
-                          {sub.title}
-                        </Link>
-                      ))}
-                    </div>
+                    {openIndex === index && (
+                      <div className="absolute top-full left-0 z-50 mt-1 w-64 rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                        {item.submenu?.map((sub, i) => (
+                          <Link
+                            key={i}
+                            href={sub.path}
+                            onClick={() => setOpenIndex(-1)}
+                            className="block rounded-lg px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-blue-50 hover:text-[#0077b6]"
+                          >
+                            {sub.title}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </>
                 )}
               </div>
