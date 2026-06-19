@@ -125,7 +125,7 @@ export default function Page() {
             <h2 className="mb-5 text-2xl font-bold text-gray-900">Konumumuz</h2>
             <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3057.0251732432624!2d32.793!3d39.9835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d34f9e85e77d6b%3A0x7a7e3c0e8d12a3e2!2zQmHFn2tlbnQgRGlsIEtvbnXFn21hIE1lcmtlemk!5e0!3m2!1str!2str!4v1718800000000!5m2!1str!2str"
+                src="https://maps.google.com/maps?q=I%C5%9F%C4%B1nlar+Mah+%C4%B0vedik+Cad+No+2+Yenimahalle+Ankara&output=embed&z=17"
                 width="100%"
                 height="420"
                 style={{ border: 0 }}
