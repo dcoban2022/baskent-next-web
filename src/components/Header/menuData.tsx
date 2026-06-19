@@ -119,6 +119,12 @@ const menuData: Menu[] = [
   },
   {
     id: 4,
+    title: "Değerlendirme",
+    path: "/degerlendirme",
+    newTab: false,
+  },
+  {
+    id: 5,
     title: "İletişim",
     path: "/iletisim",
     newTab: false,
