@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -55,9 +56,13 @@ const Header = () => {
                   sticky ? "py-5 lg:py-2" : "py-8"
                 } `}
               >
-                <span className="text-2xl font-bold text-black dark:text-white">
-                  Deniz
-                </span>
+                <Image
+                  src="/images/logo/baskent-logo.png"
+                  alt="Başkent Dil Konuşma"
+                  width={180}
+                  height={60}
+                  className="w-full"
+                />
               </Link>
             </div>
             <div className="flex w-full items-center justify-between px-4">
