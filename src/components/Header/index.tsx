@@ -55,6 +55,9 @@ const Header = () => {
             </a>
           </div>
           <div className="flex items-center gap-3">
+            <Link href="/dil-ve-konusma-bozukluklari" className="hidden items-center gap-1 font-medium transition hover:text-white/80 lg:flex whitespace-nowrap">
+              Dil ve Konuşma Bozuklukları
+            </Link>
             <Link href="/dikkat-egitimi-moxo-dikkat-testi" className="hidden items-center gap-1 font-medium transition hover:text-white/80 sm:flex whitespace-nowrap">
               Dikkat Eğitimi &amp; MOXO
             </Link>
