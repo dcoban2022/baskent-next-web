@@ -12,31 +12,32 @@ const slides = [
     id: 1,
     src: "/images/slider/slider-1.webp",
     alt: "Başkent Dil Konuşma Terapi Seansı",
-    title: "Uzman Kadroyla\nGeleceğinize Yatırım Yapın",
-    subtitle: "2004'ten bu yana dil, konuşma ve öğrenme güçlüklerinde profesyonel destek",
+    title: "Uzman Kadromuzla\nYanınızdayız",
+    subtitle:
+      "2004'ten bu yana dil, konuşma ve öğrenme güçlüklerinde profesyonel destek",
   },
   {
     id: 2,
     src: "/images/slider/slider-2.webp",
     alt: "Başkent Dil Konuşma Bireysel Eğitim",
-    title: "Bireysel ve Grup\nEğitimleri",
-    subtitle: "RAM raporlu bireylere ücretsiz eğitim imkânı sunuyoruz",
+    title: "Bireysel & Grup\nEğitimleri",
+    subtitle: "RAM raporlu bireylere ücretsiz eğitim ve servis hizmeti",
   },
   {
     id: 3,
     src: "/images/slider/slider-3.webp",
     alt: "Başkent Dil Konuşma Değerlendirme",
-    title: "Özel Eğitim ve\nRehabilitasyon Merkezi",
+    title: "Özel Eğitim ve\nRehabilitasyon",
     subtitle: "Türkiye'nin dört bir yanından bireylere özel hizmet",
   },
 ];
 
 const Slider = () => {
   return (
-    <section className="relative mt-[70px] w-full">
+    <section className="relative w-full">
       <Swiper
         modules={[Autoplay, Navigation, Pagination]}
-        autoplay={{ delay: 4500, disableOnInteraction: false }}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
         navigation
         pagination={{ clickable: true }}
         loop
@@ -44,7 +45,7 @@ const Slider = () => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <div className="relative h-[300px] w-full md:h-[380px] lg:h-[450px]">
+            <div className="relative h-[480px] w-full lg:h-[560px]">
               <Image
                 src={slide.src}
                 alt={slide.alt}
@@ -52,7 +53,7 @@ const Slider = () => {
                 className="object-cover"
                 priority={slide.id === 1}
               />
-              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-black/50" />
               <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
                 <h1 className="mb-4 whitespace-pre-line text-3xl font-bold leading-tight drop-shadow-lg md:text-4xl lg:text-5xl">
                   {slide.title}
@@ -68,10 +69,10 @@ const Slider = () => {
                     Bize Ulaşın
                   </Link>
                   <Link
-                    href="/hakkimizda"
+                    href="#services"
                     className="rounded border-2 border-white px-8 py-3 font-semibold text-white transition hover:bg-white hover:text-black"
                   >
-                    Hakkımızda
+                    Hizmetlerimiz
                   </Link>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import ScrollUp from "@/components/Common/ScrollUp";
 import Slider from "@/components/Slider";
 import Services from "@/components/Services";
+import WhyUs from "@/components/WhyUs";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import { Metadata } from "next";
@@ -17,6 +18,7 @@ export default function Home() {
       <ScrollUp />
       <Slider />
       <Services />
+      <WhyUs />
       <About />
       <Contact />
     </>
