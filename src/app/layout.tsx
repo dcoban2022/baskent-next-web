@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ChatWidget from "@/components/ChatWidget";
+import CookieBanner from "@/components/CookieBanner";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 
@@ -23,6 +24,65 @@ export default function RootLayout({
         <meta property="og:image" content="/images/logo/baskent-logo.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "MedicalBusiness",
+              "name": "Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi",
+              "alternateName": "Başkent Dil Konuşma",
+              "url": "https://www.baskentdilkonusma.com",
+              "logo": "https://www.baskentdilkonusma.com/images/logo/baskent-logo.png",
+              "image": "https://www.baskentdilkonusma.com/images/logo/baskent-logo.png",
+              "description": "2004'ten bu yana Ankara'da dil ve konuşma bozuklukları, disleksi, disgrafi, diskalkuli, dispraksi, dikkat eğitimi ve işitme engeli alanlarında uzman eğitim ve rehabilitasyon hizmetleri.",
+              "telephone": "+903123449316",
+              "email": "iletisimrehabilitasyonhizmetleri@hs01.kep.tr",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Işınlar Mah. İvedik Cad. No:2",
+                "addressLocality": "Yenimahalle",
+                "addressRegion": "Ankara",
+                "postalCode": "06370",
+                "addressCountry": "TR"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 39.9886,
+                "longitude": 32.7731
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+                  "opens": "08:00",
+                  "closes": "18:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": "Saturday",
+                  "opens": "09:00",
+                  "closes": "14:00"
+                }
+              ],
+              "medicalSpecialty": [
+                "Dil ve Konuşma Terapisi",
+                "Özel Eğitim",
+                "Rehabilitasyon"
+              ],
+              "priceRange": "$$",
+              "sameAs": [
+                "https://www.instagram.com/baskentdilkonusma",
+                "https://www.facebook.com/baskentdilkonusma"
+              ],
+              "foundingDate": "2004",
+              "areaServed": {
+                "@type": "City",
+                "name": "Ankara"
+              }
+            })
+          }}
+        />
       </head>
       <body className={`bg-white ${inter.className}`}>
         <Providers>
@@ -34,6 +94,7 @@ export default function RootLayout({
           <ScrollToTop />
           <WhatsAppButton />
           <ChatWidget />
+          <CookieBanner />
         </Providers>
       </body>
     </html>
