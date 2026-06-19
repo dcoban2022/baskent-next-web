@@ -21,7 +21,7 @@ const stats = [
 
 const Hero = () => {
   return (
-    <section className="mt-[80px] bg-gradient-to-br from-[#f0f7ff] to-white">
+    <section className="mt-[116px] bg-gradient-to-br from-[#f0f7ff] to-white">
       <div className="container">
         <div className="flex min-h-[520px] flex-col items-center gap-8 py-12 lg:flex-row lg:gap-16 lg:py-16">
 
