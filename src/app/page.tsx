@@ -1,19 +1,14 @@
-import AboutSectionOne from "@/components/About/AboutSectionOne";
-import AboutSectionTwo from "@/components/About/AboutSectionTwo";
-import Blog from "@/components/Blog";
-import Brands from "@/components/Brands";
 import ScrollUp from "@/components/Common/ScrollUp";
-import Contact from "@/components/Contact";
-import Features from "@/components/Features";
 import Slider from "@/components/Slider";
-import Pricing from "@/components/Pricing";
-import Testimonials from "@/components/Testimonials";
-import Video from "@/components/Video";
+import Services from "@/components/Services";
+import About from "@/components/About";
+import Contact from "@/components/Contact";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Başkent Dil Konuşma - İşitme Özel Öğrenme Güçlüğü",
-  description: "Başkent Dil Konuşma - Dil ve Konuşma Bozuklukları, Disleksi, Disgrafi, Diskalkuli, Dispraksi, Dikkat Eğitimi",
+  title: "Başkent Dil Konuşma — İşitme, Özel Öğrenme Güçlüğü, Özel Eğitim ve Rehabilitasyon Merkezi",
+  description:
+    "2004'ten bu yana Ankara'da dil ve konuşma bozuklukları, disleksi, disgrafi, diskalkuli, dispraksi, dikkat eğitimi ve işitme engeli alanlarında uzman eğitim hizmetleri.",
 };
 
 export default function Home() {
@@ -21,14 +16,8 @@ export default function Home() {
     <>
       <ScrollUp />
       <Slider />
-      <Features />
-      <Video />
-      <Brands />
-      <AboutSectionOne />
-      <AboutSectionTwo />
-      <Testimonials />
-      <Pricing />
-      <Blog />
+      <Services />
+      <About />
       <Contact />
     </>
   );
