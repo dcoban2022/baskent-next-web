@@ -17,7 +17,7 @@ const About = () => {
           <div className="w-full px-4 lg:w-1/2">
             <div className="relative mb-12 lg:mb-0">
               <Image
-                src="/images/slider/slider-1.webp"
+                src="/images/about/about-main.jpg"
                 alt="Başkent Dil Konuşma Merkezi"
                 width={700}
                 height={500}
@@ -25,7 +25,7 @@ const About = () => {
               />
               <div className="absolute -bottom-6 -right-6 hidden overflow-hidden rounded-xl border-4 border-white shadow-lg lg:block">
                 <Image
-                  src="/images/slider/slider-2.webp"
+                  src="/images/slider/slider-3.webp"
                   alt="Bireysel Eğitim"
                   width={200}
                   height={150}

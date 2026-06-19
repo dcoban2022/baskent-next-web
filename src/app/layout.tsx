@@ -3,6 +3,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 
@@ -14,13 +15,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
-
+    <html suppressHydrationWarning lang="tr">
+      <head>
+        <link rel="icon" href="/images/logo/baskent-logo.png" type="image/png" />
+        <meta property="og:site_name" content="Başkent Dil Konuşma" />
+        <meta property="og:image" content="/images/logo/baskent-logo.png" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </head>
       <body className={`bg-white ${inter.className}`}>
         <Providers>
           <div className="isolate">
@@ -29,6 +31,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <ScrollToTop />
+          <WhatsAppButton />
         </Providers>
       </body>
     </html>
@@ -36,4 +39,3 @@ export default function RootLayout({
 }
 
 import { Providers } from "./providers";
-

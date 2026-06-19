@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "İletişim — Başkent Dil Konuşma",
@@ -150,64 +151,7 @@ export default function Page() {
           <div>
             <h2 className="mb-5 text-2xl font-bold text-gray-900">Mesaj Gönderin</h2>
             <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-              <form className="space-y-5">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">Ad Soyad</label>
-                    <input
-                      type="text"
-                      placeholder="Adınız Soyadınız"
-                      className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">Telefon</label>
-                    <input
-                      type="tel"
-                      placeholder="0 5XX XXX XX XX"
-                      className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700">E-posta</label>
-                  <input
-                    type="email"
-                    placeholder="ornek@email.com"
-                    className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700">Konu</label>
-                  <select className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20">
-                    <option value="">Konu seçiniz</option>
-                    <option>Dil ve Konuşma Bozuklukları</option>
-                    <option>İşitme Engeli Eğitimi</option>
-                    <option>Disleksi</option>
-                    <option>Disgrafi</option>
-                    <option>Diskalkuli</option>
-                    <option>Dispraksi</option>
-                    <option>Dikkat Eğitimi & MOXO</option>
-                    <option>Bireysel ve Grup Eğitimi</option>
-                    <option>Değerlendirme</option>
-                    <option>Diğer</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700">Mesajınız</label>
-                  <textarea
-                    rows={5}
-                    placeholder="Mesajınızı buraya yazın..."
-                    className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-[#e63946] py-3.5 text-sm font-semibold text-white transition hover:bg-[#c1121f]"
-                >
-                  Mesaj Gönder
-                </button>
-              </form>
+              <ContactForm />
             </div>
           </div>
         </div>
