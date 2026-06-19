@@ -34,7 +34,7 @@ const slides = [
 
 const Slider = () => {
   return (
-    <section className="relative w-full">
+    <section className="relative mt-[80px] w-full">
       <Swiper
         modules={[Autoplay, Navigation, Pagination]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
