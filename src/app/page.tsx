@@ -1,12 +1,17 @@
 import ScrollUp from "@/components/Common/ScrollUp";
 import Slider from "@/components/Slider";
 import StatsBar from "@/components/StatsBar";
+import TrustBand from "@/components/TrustBand";
 import Services from "@/components/Services";
 import HowItWorks from "@/components/HowItWorks";
+import CTABand from "@/components/CTABand";
 import WhyUs from "@/components/WhyUs";
+import TeamPreview from "@/components/TeamPreview";
 import About from "@/components/About";
+import VideoSection from "@/components/VideoSection";
 import FAQ from "@/components/FAQ";
 import MapSection from "@/components/MapSection";
+import ServiceArea from "@/components/ServiceArea";
 import LatestArticles from "@/components/LatestArticles";
 import FamilyTestimonials from "@/components/FamilyTestimonials";
 import InstagramFeed from "@/components/InstagramFeed";
@@ -33,12 +38,17 @@ export default function Home() {
       <ScrollUp />
       <Slider />
       <StatsBar />
+      <TrustBand />
       <Services />
       <HowItWorks />
+      <CTABand />
       <WhyUs />
+      <TeamPreview />
       <About />
+      <VideoSection />
       <FAQ />
       <MapSection />
+      <ServiceArea />
       <LatestArticles />
       <FamilyTestimonials />
       <InstagramFeed />
