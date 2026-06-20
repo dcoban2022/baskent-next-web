@@ -16,7 +16,7 @@ export default function MapSection() {
 
         <div className="overflow-hidden rounded-2xl shadow-lg">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3058.9!2d32.7731!3d39.9886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d34f9b8b9b9b9b%3A0x0!2zQmHFn2tlbnQgRGlsIEtvbnXFn21h!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str&q=Ba%C5%9Fkent+Dil+Konu%C5%9Fma+%C3%96zel+E%C4%9Fitim+ve+Rehabilitasyon+Merkezi+%C4%B0vedik+Ankara"
+            src="https://maps.google.com/maps?q=Ba%C5%9Fkent+Dil+Konu%C5%9Fma+%C3%96zel+E%C4%9Fitim+ve+Rehabilitasyon+Merkezi+%C4%B0vedik+Cad+Yenimahalle+Ankara&output=embed&z=16"
             width="100%"
             height="400"
             style={{ border: 0, display: "block" }}
