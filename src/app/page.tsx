@@ -8,7 +8,6 @@ import CTABand from "@/components/CTABand";
 import WhyUs from "@/components/WhyUs";
 import TeamPreview from "@/components/TeamPreview";
 import About from "@/components/About";
-import VideoSection from "@/components/VideoSection";
 import FAQ from "@/components/FAQ";
 import MapSection from "@/components/MapSection";
 import ServiceArea from "@/components/ServiceArea";
@@ -45,7 +44,6 @@ export default function Home() {
       <WhyUs />
       <TeamPreview />
       <About />
-      <VideoSection />
       <FAQ />
       <MapSection />
       <ServiceArea />
