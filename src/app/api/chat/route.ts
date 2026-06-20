@@ -1,9 +1,4 @@
 import { NextRequest } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
 
 const SYSTEM_PROMPT = `Sen Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi'nin yapay zeka asistanısın. Türkçe yanıt veriyorsun.
 
@@ -51,30 +46,69 @@ export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    if (!process.env.GEMINI_API_KEY) {
       return Response.json(
         { error: "API anahtarı yapılandırılmamış." },
         { status: 500 }
       );
     }
 
-    const stream = await client.messages.create({
-      model: "claude-haiku-4-5",
-      max_tokens: 512,
-      system: SYSTEM_PROMPT,
-      messages,
-      stream: true,
-    });
+    // Gemini mesaj formatına dönüştür
+    const geminiMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
+    const body = {
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: geminiMessages,
+      generationConfig: {
+        maxOutputTokens: 512,
+        temperature: 0.7,
+      },
+    };
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (!res.ok || !res.body) {
+      const err = await res.text();
+      console.error("Gemini error:", err);
+      return Response.json({ error: "API hatası" }, { status: 500 });
+    }
 
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const event of stream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text));
+        const reader = res.body!.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const json = line.slice(6).trim();
+            if (!json || json === "[DONE]") continue;
+            try {
+              const parsed = JSON.parse(json);
+              const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (text) controller.enqueue(encoder.encode(text));
+            } catch {
+              // geçersiz JSON satırı atla
+            }
           }
         }
         controller.close();
