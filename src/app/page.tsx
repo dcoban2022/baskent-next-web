@@ -1,10 +1,15 @@
 import ScrollUp from "@/components/Common/ScrollUp";
 import Slider from "@/components/Slider";
+import StatsBar from "@/components/StatsBar";
 import Services from "@/components/Services";
+import HowItWorks from "@/components/HowItWorks";
 import WhyUs from "@/components/WhyUs";
 import About from "@/components/About";
+import FAQ from "@/components/FAQ";
+import MapSection from "@/components/MapSection";
 import LatestArticles from "@/components/LatestArticles";
 import FamilyTestimonials from "@/components/FamilyTestimonials";
+import InstagramFeed from "@/components/InstagramFeed";
 import Contact from "@/components/Contact";
 import { Metadata } from "next";
 
@@ -27,11 +32,16 @@ export default function Home() {
     <>
       <ScrollUp />
       <Slider />
+      <StatsBar />
       <Services />
+      <HowItWorks />
       <WhyUs />
       <About />
+      <FAQ />
+      <MapSection />
       <LatestArticles />
       <FamilyTestimonials />
+      <InstagramFeed />
       <Contact />
     </>
   );
