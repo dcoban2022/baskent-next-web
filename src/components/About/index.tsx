@@ -21,6 +21,8 @@ const About = () => {
                 alt="Başkent Dil Konuşma Merkezi"
                 width={700}
                 height={500}
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full rounded-2xl object-cover shadow-xl"
               />
               <div className="absolute -bottom-6 -right-6 hidden overflow-hidden rounded-xl border-4 border-white shadow-lg lg:block">
@@ -29,6 +31,8 @@ const About = () => {
                   alt="Bireysel Eğitim"
                   width={200}
                   height={150}
+                  loading="lazy"
+                  sizes="200px"
                   className="h-[150px] w-[200px] object-cover"
                 />
               </div>

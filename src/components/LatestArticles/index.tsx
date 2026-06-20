@@ -52,7 +52,7 @@ export default function LatestArticles() {
           {makaleler.map((m) => (
             <Link key={m.slug} href={`/makaleler/${m.slug}`} className="group rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md overflow-hidden flex flex-col">
               <div className="relative h-44 overflow-hidden">
-                <Image src={m.resim} alt={m.baslik} fill className="object-cover transition group-hover:scale-105" />
+                <Image src={m.resim} alt={m.baslik} fill loading="lazy" sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition group-hover:scale-105" />
                 <span className="absolute left-3 top-3 rounded-full bg-[#0077b6] px-3 py-1 text-xs font-semibold text-white">
                   {m.kategori}
                 </span>
