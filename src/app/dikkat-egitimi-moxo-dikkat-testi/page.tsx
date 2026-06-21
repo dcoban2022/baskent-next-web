@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "Dikkat Eğitimi & MOXO Dikkat Testi — Başkent Dil Konuşma",
@@ -9,6 +10,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="Dikkat Eğitimi & MOXO Dikkat Testi"
+      description="7-14 yaş için Attentioner dikkat programı ve 6-70 yaş için MOXO bilgisayar destekli dikkat testi."
+      url="https://www.baskentdilkonusma.com/dikkat-egitimi-moxo-dikkat-testi"
+      breadcrumbLabel="Dikkat Eğitimi & MOXO"
+    />
     <main className="pt-[116px]">
       <div className="bg-gradient-to-br from-[#f5f0ff] to-white py-12">
         <div className="container">
@@ -102,5 +110,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }

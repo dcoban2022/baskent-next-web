@@ -1,12 +1,15 @@
 "use client";
 
+import { track } from "@vercel/analytics";
+
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/905057141668?text=Merhaba%2C%20bilgi%20almak%20istiyorum."
+      href="https://wa.me/905335734564?text=Merhaba%2C%20bilgi%20almak%20istiyorum."
       target="_blank"
       rel="noopener noreferrer"
       aria-label="WhatsApp ile iletişime geç"
+      onClick={() => track("whatsapp_clicked", { source: "floating_button" })}
       className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition hover:scale-110 hover:shadow-xl"
     >
       <svg className="h-7 w-7 text-white" fill="currentColor" viewBox="0 0 24 24">

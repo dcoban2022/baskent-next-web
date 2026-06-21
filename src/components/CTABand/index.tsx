@@ -1,11 +1,13 @@
+"use client";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 
 export default function CTABand() {
   return (
     <section className="bg-[#e63946] py-14">
       <div className="container text-center">
         <h2 className="mb-3 text-3xl font-bold text-white md:text-4xl">
-          Çocuğunuzu Değerlendirtelim
+          Çocuğunuzu Değerlendirelim
         </h2>
         <p className="mx-auto mb-8 max-w-xl text-lg text-white/85">
           Ücretsiz ilk görüşme için hemen arayın. Uzmanlarımız sizi doğru yönlendirsin.
@@ -13,6 +15,7 @@ export default function CTABand() {
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="tel:03123449316"
+            onClick={() => track("phone_clicked", { number: "03123449316", source: "cta_band" })}
             className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 font-bold text-[#e63946] shadow-lg transition hover:bg-white/90"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

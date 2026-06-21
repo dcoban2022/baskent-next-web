@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -154,19 +155,19 @@ const Header = () => {
       <div className="bg-[#0077b6] py-1.5 text-white">
         <div className="container flex items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-3 sm:gap-5">
-            <a href="tel:03123449316" className="flex items-center gap-1 transition hover:text-white/80">
+            <a href="tel:03123449316" onClick={() => track("phone_clicked", { number: "03123449316", source: "header" })} className="flex items-center gap-1 transition hover:text-white/80">
               <svg className="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75Z" />
               </svg>
               <span>0312 344 93 16</span>
             </a>
-            <a href="tel:05057141668" className="hidden items-center gap-1 transition hover:text-white/80 sm:flex">
+            <a href="tel:05057141668" onClick={() => track("phone_clicked", { number: "05057141668", source: "header" })} className="hidden items-center gap-1 transition hover:text-white/80 sm:flex">
               <svg className="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
               </svg>
               <span className="hidden md:inline">Kurum Müdürü: </span>0505 714 16 68
             </a>
-            <a href="tel:05335734564" className="hidden items-center gap-1 transition hover:text-white/80 lg:flex">
+            <a href="tel:05335734564" onClick={() => track("phone_clicked", { number: "05335734564", source: "header" })} className="hidden items-center gap-1 transition hover:text-white/80 lg:flex">
               <svg className="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3" />
               </svg>
@@ -174,8 +175,17 @@ const Header = () => {
             </a>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/dil-ve-konusma-bozukluklari" className="hidden items-center gap-1 font-medium transition hover:text-white/80 lg:flex whitespace-nowrap">
+            <Link href="/dil-ve-konusma-bozukluklari" className="hidden items-center gap-1 font-medium transition hover:text-white/80 xl:flex whitespace-nowrap">
               Dil ve Konuşma Bozuklukları
+            </Link>
+            <Link href="/disleksi" className="hidden items-center gap-1 font-medium transition hover:text-white/80 lg:flex whitespace-nowrap">
+              Disleksi
+            </Link>
+            <Link href="/isitme-engeli" className="hidden items-center gap-1 font-medium transition hover:text-white/80 lg:flex whitespace-nowrap">
+              İşitme Engeli
+            </Link>
+            <Link href="/oyun-terapisi" className="hidden items-center gap-1 font-medium transition hover:text-white/80 lg:flex whitespace-nowrap">
+              Oyun Terapi
             </Link>
             <Link href="/dikkat-egitimi-moxo-dikkat-testi" className="hidden items-center gap-1 font-medium transition hover:text-white/80 sm:flex whitespace-nowrap">
               Dikkat Eğitimi &amp; MOXO

@@ -1,4 +1,35 @@
-const Contact = () => {
+"use client";
+import { useState } from "react";
+import { track } from "@vercel/analytics";
+
+export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus("idle");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, message }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+      setName(""); setEmail(""); setPhone(""); setMessage("");
+    } catch {
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="container">
@@ -14,87 +45,100 @@ const Contact = () => {
           {/* Form */}
           <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
             <div className="mb-12 rounded-2xl bg-white px-8 py-10 shadow-sm border border-gray-100 lg:mb-5">
-              <form>
-                <div className="-mx-4 flex flex-wrap">
-                  <div className="w-full px-4 md:w-1/2">
-                    <div className="mb-6">
-                      <label
-                        htmlFor="name"
-                        className="mb-2 block text-sm font-medium text-gray-700"
-                      >
-                        Ad Soyad
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        placeholder="Adınızı ve soyadınızı girin"
-                        className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
-                      />
-                    </div>
+              {status === "success" ? (
+                <div className="flex flex-col items-center py-8 text-center">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                    <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
                   </div>
-                  <div className="w-full px-4 md:w-1/2">
-                    <div className="mb-6">
-                      <label
-                        htmlFor="email"
-                        className="mb-2 block text-sm font-medium text-gray-700"
-                      >
-                        E-posta
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        placeholder="E-posta adresinizi girin"
-                        className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4">
-                    <div className="mb-6">
-                      <label
-                        htmlFor="phone"
-                        className="mb-2 block text-sm font-medium text-gray-700"
-                      >
-                        Telefon
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        placeholder="Telefon numaranızı girin"
-                        className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4">
-                    <div className="mb-6">
-                      <label
-                        htmlFor="message"
-                        className="mb-2 block text-sm font-medium text-gray-700"
-                      >
-                        Mesaj
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={5}
-                        placeholder="Mesajınızı buraya yazın"
-                        className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="w-full px-4">
-                    <button className="rounded-lg bg-[#e63946] px-8 py-3 text-base font-semibold text-white transition hover:bg-[#c1121f]">
-                      Gönder
-                    </button>
-                  </div>
+                  <h3 className="mb-2 text-xl font-bold text-gray-900">Mesajınız İletildi!</h3>
+                  <p className="mb-6 text-gray-500">En kısa sürede sizinle iletişime geçeceğiz.</p>
+                  <button
+                    onClick={() => setStatus("idle")}
+                    className="rounded-lg border border-gray-200 px-6 py-2.5 text-sm font-medium text-gray-600 hover:border-[#0077b6] hover:text-[#0077b6] transition"
+                  >
+                    Yeni Mesaj Gönder
+                  </button>
                 </div>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <div className="-mx-4 flex flex-wrap">
+                    <div className="w-full px-4 md:w-1/2">
+                      <div className="mb-6">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">Ad Soyad *</label>
+                        <input
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Adınızı ve soyadınızı girin"
+                          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full px-4 md:w-1/2">
+                      <div className="mb-6">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">E-posta</label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="E-posta adresinizi girin"
+                          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full px-4">
+                      <div className="mb-6">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">Telefon</label>
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="Telefon numaranızı girin"
+                          className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full px-4">
+                      <div className="mb-6">
+                        <label className="mb-2 block text-sm font-medium text-gray-700">Mesaj *</label>
+                        <textarea
+                          required
+                          rows={5}
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          placeholder="Mesajınızı buraya yazın"
+                          className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20 transition"
+                        />
+                      </div>
+                    </div>
+                    {status === "error" && (
+                      <div className="w-full px-4 mb-4">
+                        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+                          Gönderim sırasında bir hata oluştu. Lütfen bizi doğrudan arayın.
+                        </p>
+                      </div>
+                    )}
+                    <div className="w-full px-4">
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="rounded-lg bg-[#e63946] px-8 py-3 text-base font-semibold text-white transition hover:bg-[#c1121f] disabled:opacity-60"
+                      >
+                        {loading ? "Gönderiliyor..." : "Gönder"}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
 
           {/* İletişim Bilgileri */}
           <div className="w-full px-4 lg:w-5/12 xl:w-4/12">
             <div className="space-y-4">
-              {/* Adres */}
               <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                   <svg className="h-5 w-5 text-[#0077b6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -108,7 +152,6 @@ const Contact = () => {
                 </p>
               </div>
 
-              {/* Telefon */}
               <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                   <svg className="h-5 w-5 text-[#0077b6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -118,19 +161,14 @@ const Contact = () => {
                 <h3 className="mb-1 text-sm font-semibold text-gray-900">Telefon</h3>
                 <p className="text-sm text-gray-500">
                   Kurum Müdürü:{" "}
-                  <a href="tel:05057141668" className="text-[#0077b6] hover:underline">
-                    0 (505) 714 16 68
-                  </a>
+                  <a href="tel:05057141668" onClick={() => track("phone_clicked", { number: "05057141668", source: "contact_section" })} className="text-[#0077b6] hover:underline">0 (505) 714 16 68</a>
                 </p>
                 <p className="text-sm text-gray-500">
                   Uzman Danışman:{" "}
-                  <a href="tel:05335734564" className="text-[#0077b6] hover:underline">
-                    0 (533) 573 45 64
-                  </a>
+                  <a href="tel:05335734564" onClick={() => track("phone_clicked", { number: "05335734564", source: "contact_section" })} className="text-[#0077b6] hover:underline">0 (533) 573 45 64</a>
                 </p>
               </div>
 
-              {/* E-posta */}
               <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                   <svg className="h-5 w-5 text-[#0077b6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -138,11 +176,8 @@ const Contact = () => {
                   </svg>
                 </div>
                 <h3 className="mb-1 text-sm font-semibold text-gray-900">E-posta</h3>
-                <a
-                  href="mailto:info@baskentdilkonusma.com"
-                  className="text-sm text-[#0077b6] hover:underline"
-                >
-                  info@baskentdilkonusma.com
+                <a href="mailto:baskentdilkonusma@gmail.com" onClick={() => track("email_clicked", { source: "contact_section" })} className="text-sm text-[#0077b6] hover:underline">
+                  baskentdilkonusma@gmail.com
                 </a>
               </div>
             </div>
@@ -151,6 +186,4 @@ const Contact = () => {
       </div>
     </section>
   );
-};
-
-export default Contact;
+}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "Bireysel ve Grup Eğitimi — Başkent Dil Konuşma",
@@ -9,6 +10,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="Bireysel ve Grup Eğitimi"
+      description="RAM raporlu bireyler için ayda 8 ders bireysel ve grup eğitimi. BEP programı ve ücretsiz servis."
+      url="https://www.baskentdilkonusma.com/bireysel-ve-grup-egitimi"
+      breadcrumbLabel="Bireysel ve Grup Eğitimi"
+    />
     <main className="pt-[116px]">
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
         <div className="container">
@@ -102,5 +110,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }

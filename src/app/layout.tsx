@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ChatWidget from "@/components/ChatWidget";
 import CookieBanner from "@/components/CookieBanner";
+import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 
@@ -20,10 +21,18 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="tr">
       <head>
         <link rel="icon" href="/images/logo/baskent-logo.png" type="image/png" />
+        <link rel="canonical" href="https://www.baskentdilkonusma.com" />
+        <meta name="google-site-verification" content="mQI1vXXZwdhiA_KEKthEsKulcLGjCrxuPYdQu2HM8AQ" />
         <meta property="og:site_name" content="Başkent Dil Konuşma" />
-        <meta property="og:image" content="/images/logo/baskent-logo.png" />
+        <meta property="og:image" content="https://www.baskentdilkonusma.com/images/logo/baskent-logo.png" />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="tr_TR" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://www.baskentdilkonusma.com/images/logo/baskent-logo.png" />
+        <meta name="geo.region" content="TR-06" />
+        <meta name="geo.placename" content="Ankara" />
+        <meta name="geo.position" content="39.9886;32.7731" />
+        <meta name="ICBM" content="39.9886, 32.7731" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -37,7 +46,7 @@ export default function RootLayout({
               "image": "https://www.baskentdilkonusma.com/images/logo/baskent-logo.png",
               "description": "2004'ten bu yana Ankara'da dil ve konuşma bozuklukları, disleksi, disgrafi, diskalkuli, dispraksi, dikkat eğitimi ve işitme engeli alanlarında uzman eğitim ve rehabilitasyon hizmetleri.",
               "telephone": "+903123449316",
-              "email": "iletisimrehabilitasyonhizmetleri@hs01.kep.tr",
+              "email": "baskentdilkonusma@gmail.com",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Işınlar Mah. İvedik Cad. No:2",
@@ -55,14 +64,14 @@ export default function RootLayout({
                 {
                   "@type": "OpeningHoursSpecification",
                   "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-                  "opens": "08:00",
+                  "opens": "09:00",
                   "closes": "18:00"
                 },
                 {
                   "@type": "OpeningHoursSpecification",
                   "dayOfWeek": "Saturday",
                   "opens": "09:00",
-                  "closes": "14:00"
+                  "closes": "18:00"
                 }
               ],
               "medicalSpecialty": [
@@ -95,6 +104,7 @@ export default function RootLayout({
           <WhatsAppButton />
           <ChatWidget />
           <CookieBanner />
+          <Analytics />
         </Providers>
       </body>
     </html>

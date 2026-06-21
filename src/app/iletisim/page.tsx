@@ -75,10 +75,10 @@ export default function Page() {
             </div>
             <h3 className="mb-2 font-bold text-gray-900">E-posta</h3>
             <a
-              href="mailto:iletisimrehabilitasyonhizmetleri@hs01.kep.tr"
+              href="mailto:baskentdilkonusma@gmail.com"
               className="break-all text-sm text-[#0077b6] hover:underline"
             >
-              iletisimrehabilitasyonhizmetleri<br />@hs01.kep.tr
+              baskentdilkonusma@gmail.com
             </a>
           </div>
 
@@ -126,7 +126,7 @@ export default function Page() {
             <h2 className="mb-5 text-2xl font-bold text-gray-900">Konumumuz</h2>
             <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
               <iframe
-                src="https://maps.google.com/maps?q=I%C5%9F%C4%B1nlar+Mah+%C4%B0vedik+Cad+No+2+Yenimahalle+Ankara&output=embed&z=17"
+                src="https://maps.google.com/maps?q=Ba%C5%9Fkent+Dil+Konu%C5%9Fma+%C3%96zel+E%C4%9Fitim+ve+Rehabilitasyon+Merkezi+%C4%B0vedik+Cad+Yenimahalle+Ankara&output=embed&z=16"
                 width="100%"
                 height="420"
                 style={{ border: 0 }}
@@ -163,12 +163,12 @@ export default function Page() {
           <div className="flex flex-wrap items-center justify-center gap-8 text-center text-white">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-white/70">Pazartesi – Cuma</p>
-              <p className="text-lg font-bold">08:00 – 18:00</p>
+              <p className="text-lg font-bold">09:00 – 18:00</p>
             </div>
             <div className="hidden h-10 w-px bg-white/20 sm:block" />
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-white/70">Cumartesi</p>
-              <p className="text-lg font-bold">09:00 – 14:00</p>
+              <p className="text-lg font-bold">09:00 – 18:00</p>
             </div>
             <div className="hidden h-10 w-px bg-white/20 sm:block" />
             <div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "Değerlendirme — Başkent Dil Konuşma",
@@ -27,6 +28,13 @@ const sonuclar = [
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="Değerlendirme"
+      description="İlk değerlendirmede TEDİL, AAT ve Disleksi Bataryası ile kapsamlı formal/informal değerlendirme. Sonuçlara göre özel veya RAM kanallı eğitim programlanır."
+      url="https://www.baskentdilkonusma.com/degerlendirme"
+      breadcrumbLabel="Değerlendirme"
+    />
     <main className="pt-[116px]">
       {/* Hero */}
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
@@ -171,5 +179,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }

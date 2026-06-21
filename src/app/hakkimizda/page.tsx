@@ -73,7 +73,7 @@ export default function Page() {
                   2004 yılından bu yana özel eğitim sektöründe hizmet vermekteyiz. MEB'e bağlı olarak hizmet verilen modüllerimiz; Öğrenme güçlüğü/disleksi, İşitme, Dil ve Konuşma bozukluklarıdır.
                 </p>
                 <p>
-                  Kurumumuzda Fizik / Zihin / Otizm modülleri bulunmamaktadır. Deneyimli ve akademik kadromuzla sektörümüzün önde gelen merkezlerinden biri olarak hizmet vermekteyiz.
+                  Deneyimli ve akademik kadromuzla sektörümüzün önde gelen merkezlerinden biri olarak hizmet vermekteyiz.
                 </p>
                 <p>
                   Kurumumuz yenilikleri yakından takip etmekte, en yeni müdahale yöntemlerini öğrencilerimiz ile buluşturmayı hedeflemektedir. Merkezimizde sadece Ankara değil Türkiye'nin birçok ilinden gelen bireylere özgü hizmetler sunulmaktadır.
@@ -82,7 +82,7 @@ export default function Page() {
                   Uzman ve akademik eğitim kadrosu ile öğrencilerimizin bir yıldız olarak hayata kazandırılması temel hedefimizdir.
                 </p>
                 <p className="font-semibold text-[#e63946]">
-                  RAM raporlu bireyler için servis hizmetimiz tamamen ücretsizdir.
+                  RAM raporlu bireyler için eğitim hizmetimiz tamamen ücretsizdir.
                 </p>
               </div>
 
@@ -169,7 +169,7 @@ export default function Page() {
       <div className="bg-[#0077b6] py-12">
         <div className="container text-center">
           <h2 className="mb-3 text-2xl font-bold text-white">Ücretsiz Değerlendirme için Bize Ulaşın</h2>
-          <p className="mb-6 text-white/80">RAM raporlu bireyler için servis hizmetimiz tamamen ücretsizdir.</p>
+          <p className="mb-6 text-white/80">RAM raporlu bireyler için eğitim hizmetimiz tamamen ücretsizdir.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/iletisim"

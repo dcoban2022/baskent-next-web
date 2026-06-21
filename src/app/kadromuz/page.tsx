@@ -14,6 +14,12 @@ const yonetim = [
     image: "/images/kadro/hatice-okmen.jpg",
   },
   {
+    name: "Serdar Sipahi",
+    title: "Kurucu / Dil ve Konuşma Terapisti",
+    spec: "Odyoloji ve Ses / Konuşma Bozuklukları",
+    image: "/images/kadro/serdar-sipahi.jpg",
+  },
+  {
     name: "Turgay Dursun",
     title: "Kurum Müdür Yardımcısı",
     spec: "",
@@ -119,8 +125,10 @@ const ogretmenler = [
 
 const diger = [
   { name: "Yıldız Akyol", title: "Yardımcı Personel" },
+  { name: "Hatun Pehlivan", title: "Yardımcı Personel" },
   { name: "Abdullah Kunduz", title: "Servis Personeli" },
-  { name: "Mücahit Çınar", title: "Servis Personeli" },
+  { name: "Serdar Baş", title: "Servis Personeli" },
+  { name: "Sinan Köyhanoğlu", title: "Servis Personeli" },
 ];
 
 type Member = { name: string; title: string; spec?: string; image?: string };

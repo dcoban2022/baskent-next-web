@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const team = [
   { name: "Hatice Ökmen", title: "Kurum Müdürü", spec: "Sosyal Bilgiler Öğretmeni", image: "/images/kadro/hatice-okmen.jpg", position: "object-top" },
-  { name: "Serdar Sipahi", title: "Dil ve Konuşma Terapisti", spec: "Odyoloji ve Ses / Konuşma Bozuklukları", image: "/images/kadro/serdar-sipahi.jpg", position: "object-top" },
+  { name: "Serdar Sipahi", title: "Kurucu / Dil ve Konuşma Terapisti", spec: "Odyoloji ve Ses / Konuşma Bozuklukları", image: "/images/kadro/serdar-sipahi.jpg", position: "object-top" },
   { name: "Hasret Özdemir", title: "Odyolog", spec: "Odyoloji", image: "/images/kadro/hasret-ozdemir.jpg", position: "object-center" },
   { name: "Beyza Nur Bilgi", title: "Psikolog / Uzman Öğretici", spec: "Özel Eğitim Alanı", image: "/images/kadro/beyza-nur-bilgi.jpg", position: "object-top" },
 ];
@@ -23,13 +23,13 @@ export default function TeamPreview() {
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
           {team.map((member) => (
             <div key={member.name} className="group text-center">
-              <div className="relative mx-auto mb-4 h-36 w-36 overflow-hidden rounded-2xl shadow-md">
+              <div className="relative mx-auto mb-4 h-48 w-48 overflow-hidden rounded-2xl shadow-md">
                 <Image
                   src={member.image}
                   alt={member.name}
                   fill
                   loading="lazy"
-                  sizes="144px"
+                  sizes="192px"
                   className={`object-cover transition-transform duration-500 group-hover:scale-105 ${member.position}`}
                 />
               </div>

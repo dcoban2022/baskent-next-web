@@ -8,11 +8,10 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const images = [
-  { src: "/images/slider/slider-1.webp", alt: "Terapi Seansı" },
-  { src: "/images/slider/slider-2.webp", alt: "Bireysel Eğitim" },
-  { src: "/images/slider/slider-3.webp", alt: "Grup Eğitimi" },
-  { src: "/images/slider/slider-4.webp", alt: "Eğitim Seansı" },
-  { src: "/images/slider/slider-5.webp", alt: "Rehabilitasyon" },
+  { src: "/images/slider/slide-5.webp", alt: "Terapi Seansı" },
+  { src: "/images/slider/slide-2.webp", alt: "Bireysel Eğitim" },
+  { src: "/images/slider/slide-3.webp", alt: "Değerlendirme Seansı" },
+  { src: "/images/slider/slide-1.webp", alt: "Motor Beceri Eğitimi" },
 ];
 
 const stats = [
@@ -42,7 +41,7 @@ const Hero = () => {
 
             <p className="mb-8 text-lg leading-relaxed text-gray-500">
               2004'ten bu yana dil, konuşma ve öğrenme güçlüklerinde uzman
-              kadromuzla yanınızdayız. RAM raporlu bireylere ücretsiz servis
+              kadromuzla yanınızdayız. RAM raporlu bireylere ücretsiz eğitim
               hizmeti sunuyoruz.
             </p>
 

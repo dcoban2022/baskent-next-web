@@ -1,0 +1,76 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff0f0"/>
+      <stop offset="100%" style="stop-color:#ffd6d8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bg2)"/>
+
+  <!-- Dekoratif daireler -->
+  <circle cx="700" cy="100" r="130" fill="#e63946" opacity="0.07"/>
+  <circle cx="80" cy="400" r="100" fill="#e63946" opacity="0.06"/>
+  <circle cx="750" cy="430" r="70" fill="#0077b6" opacity="0.06"/>
+
+  <!-- Büyük kitap illüstrasyonu -->
+  <!-- Kitap sol sayfa -->
+  <rect x="150" y="130" width="200" height="250" rx="8" fill="white" opacity="0.95" filter="drop-shadow(0 6px 20px rgba(0,0,0,0.12))"/>
+  <!-- Kitap sağ sayfa -->
+  <rect x="350" y="130" width="200" height="250" rx="8" fill="#fff5f5" opacity="0.95" filter="drop-shadow(0 6px 20px rgba(0,0,0,0.10))"/>
+  <!-- Kitap sırtı -->
+  <rect x="345" y="128" width="14" height="254" rx="4" fill="#e63946" opacity="0.7"/>
+
+  <!-- Sol sayfadaki satırlar -->
+  <line x1="175" y1="175" x2="335" y2="175" stroke="#ddd" stroke-width="2"/>
+  <line x1="175" y1="200" x2="335" y2="200" stroke="#ddd" stroke-width="2"/>
+  <line x1="175" y1="225" x2="335" y2="225" stroke="#ddd" stroke-width="2"/>
+  <line x1="175" y1="250" x2="335" y2="250" stroke="#ddd" stroke-width="2"/>
+  <line x1="175" y1="275" x2="285" y2="275" stroke="#ddd" stroke-width="2"/>
+
+  <!-- Karışık harfler sol sayfada (disleksiyi temsil eder) -->
+  <text x="185" y="170" font-family="Georgia, serif" font-size="22" fill="#e63946" font-weight="bold">d</text>
+  <text x="205" y="170" font-family="Georgia, serif" font-size="22" fill="#333">i</text>
+  <text x="218" y="170" font-family="Georgia, serif" font-size="22" fill="#0077b6" font-weight="bold">l</text>
+  <text x="230" y="170" font-family="Georgia, serif" font-size="22" fill="#e63946" transform="rotate(180,241,162)">b</text>
+  <text x="252" y="170" font-family="Georgia, serif" font-size="22" fill="#333">a</text>
+  <text x="268" y="170" font-family="Georgia, serif" font-size="22" fill="#0077b6">k</text>
+
+  <text x="185" y="195" font-family="Georgia, serif" font-size="22" fill="#333">o</text>
+  <text x="202" y="195" font-family="Georgia, serif" font-size="22" fill="#e63946" transform="scale(-1,1)" x="-220">k</text>
+  <text x="222" y="195" font-family="Georgia, serif" font-size="22" fill="#333">u</text>
+  <text x="240" y="195" font-family="Georgia, serif" font-size="22" fill="#0077b6">m</text>
+  <text x="265" y="195" font-family="Georgia, serif" font-size="22" fill="#333">a</text>
+
+  <!-- Sağ sayfada düzgün metni/destek -->
+  <text x="375" y="170" font-family="Arial, sans-serif" font-size="13" fill="#0077b6" font-weight="bold">✓ Okuma Desteği</text>
+  <text x="375" y="200" font-family="Arial, sans-serif" font-size="12" fill="#666">Bireysel program</text>
+  <text x="375" y="225" font-family="Arial, sans-serif" font-size="12" fill="#666">Multisensory yöntem</text>
+  <text x="375" y="250" font-family="Arial, sans-serif" font-size="12" fill="#666">Harf-ses ilişkisi</text>
+  <text x="375" y="275" font-family="Arial, sans-serif" font-size="12" fill="#666">Heceleme stratejisi</text>
+  <text x="375" y="300" font-family="Arial, sans-serif" font-size="12" fill="#666">Kavrama egzersizi</text>
+  <text x="375" y="325" font-family="Arial, sans-serif" font-size="12" fill="#666">Aile rehberliği</text>
+
+  <!-- Büyüteç -->
+  <circle cx="290" cy="330" r="45" fill="none" stroke="#e63946" stroke-width="4" opacity="0.7"/>
+  <line x1="325" y1="365" x2="355" y2="395" stroke="#e63946" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <!-- Büyüteç içinde harf -->
+  <text x="272" y="342" font-family="Georgia, serif" font-size="28" fill="#0077b6" font-weight="bold">b</text>
+  <text x="294" y="342" font-family="Georgia, serif" font-size="28" fill="#e63946" font-weight="bold">d</text>
+
+  <!-- Yüzen harfler (arka planda dekoratif) -->
+  <text x="580" y="160" font-family="Georgia, serif" font-size="48" fill="#e63946" opacity="0.12" transform="rotate(-15,580,160)">d</text>
+  <text x="640" y="250" font-family="Georgia, serif" font-size="36" fill="#0077b6" opacity="0.10" transform="rotate(10,640,250)">b</text>
+  <text x="100" y="200" font-family="Georgia, serif" font-size="42" fill="#e63946" opacity="0.10" transform="rotate(20,100,200)">p</text>
+  <text x="50" y="320" font-family="Georgia, serif" font-size="38" fill="#0077b6" opacity="0.08" transform="rotate(-10,50,320)">q</text>
+
+  <!-- Başlık kartı -->
+  <rect x="30" y="30" width="200" height="50" rx="12" fill="#e63946" opacity="0.9"/>
+  <text x="130" y="62" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">Disleksi</text>
+
+  <!-- Alt bilgi -->
+  <rect x="530" y="370" width="220" height="80" rx="14" fill="white" opacity="0.88" filter="drop-shadow(0 3px 10px rgba(0,0,0,0.08))"/>
+  <text x="640" y="402" font-family="Arial, sans-serif" font-size="12" fill="#e63946" font-weight="bold" text-anchor="middle">Erken Tanı · Erken Müdahale</text>
+  <text x="640" y="422" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">Bilimsel temelli eğitim programları</text>
+  <text x="640" y="438" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">ile okuma güçlükleri aşılır.</text>
+</svg>

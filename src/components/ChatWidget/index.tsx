@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { track } from "@vercel/analytics";
 
 interface Message {
   role: "user" | "assistant";
@@ -20,6 +21,7 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open) {
@@ -27,6 +29,27 @@ export default function ChatWidget() {
       inputRef.current?.focus();
     }
   }, [messages, open]);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv || !chatRef.current) return;
+
+    const update = () => {
+      if (!chatRef.current) return;
+      const isMobile = window.innerWidth < 640;
+      if (!isMobile) return;
+      chatRef.current.style.top = `${vv.offsetTop}px`;
+      chatRef.current.style.height = `${vv.height}px`;
+    };
+
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    update();
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, [open]);
 
   async function sendMessage() {
     const text = input.trim();
@@ -40,6 +63,7 @@ export default function ChatWidget() {
     setInput("");
     setLoading(true);
 
+    track("chat_message_sent");
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -94,17 +118,20 @@ export default function ChatWidget() {
     <>
       {/* Chat window */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 flex h-[480px] w-[340px] flex-col rounded-2xl bg-white shadow-2xl border border-gray-100 overflow-hidden">
+        <div
+          ref={chatRef}
+          className="fixed left-0 right-0 top-0 z-50 flex flex-col bg-white overflow-hidden sm:inset-auto sm:bottom-24 sm:right-6 sm:top-auto sm:left-auto sm:h-[480px] sm:w-[340px] sm:rounded-2xl sm:shadow-2xl sm:border sm:border-gray-100"
+        >
           {/* Header */}
-          <div className="flex items-center gap-3 bg-[#0077b6] px-4 py-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+          <div className="flex items-center gap-3 bg-gradient-to-r from-[#0077b6] to-[#005f8e] px-4 py-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 shrink-0">
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
               </svg>
             </div>
             <div>
-              <p className="text-sm font-bold text-white">Asistan</p>
-              <p className="text-xs text-white/70">Başkent Dil Konuşma</p>
+              <p className="text-sm font-bold text-white">Başkent Dil Konuşma AI</p>
+              <p className="text-xs text-white/70">Yapay zeka destekli asistan</p>
             </div>
             <button
               onClick={() => setOpen(false)}
@@ -145,7 +172,7 @@ export default function ChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="flex items-center gap-2 border-t border-gray-100 bg-white px-3 py-2.5">
+          <div className="flex items-center gap-2 border-t border-gray-100 bg-white px-3 py-2.5 pb-[env(safe-area-inset-bottom,8px)]">
             <input
               ref={inputRef}
               type="text"
@@ -172,18 +199,35 @@ export default function ChatWidget() {
 
       {/* Toggle button */}
       <button
-        onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#0077b6] shadow-lg transition hover:scale-110 hover:bg-[#005f8e]"
-        aria-label="Asistan"
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          if (next) track("chat_opened");
+        }}
+        className="fixed bottom-6 left-6 z-50 flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#0077b6] to-[#005f8e] px-4 py-3 shadow-lg transition hover:shadow-xl hover:scale-105 active:scale-95"
+        aria-label="Başkent Dil Konuşma AI"
       >
         {open ? (
-          <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
+          <>
+            <svg className="h-5 w-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            <span className="text-sm font-semibold text-white">Kapat</span>
+          </>
         ) : (
-          <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-          </svg>
+          <>
+            <svg className="h-5 w-5 text-white shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+            </svg>
+            <div className="text-left">
+              <p className="text-xs font-bold text-white leading-tight">Başkent Dil Konuşma AI</p>
+              <p className="text-[10px] text-white/75 leading-tight">Soru sormak için tıklayın</p>
+            </div>
+            <span className="ml-1 flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
+            </span>
+          </>
         )}
       </button>
     </>

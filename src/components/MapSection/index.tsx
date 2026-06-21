@@ -59,7 +59,7 @@ export default function MapSection() {
             </div>
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Çalışma Saatleri</p>
-              <p className="text-sm text-gray-700">Pzt–Cum 08:00–18:00</p>
+              <p className="text-sm text-gray-700">Pzt–Cum 09:00–18:00</p>
             </div>
           </div>
         </div>

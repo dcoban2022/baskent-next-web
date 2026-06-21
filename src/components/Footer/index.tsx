@@ -44,7 +44,7 @@ const Footer = () => {
             <div className="space-y-1 text-xs text-white/70">
               <p><a href="tel:03123449316" className="hover:text-white">0 (312) 344 93 16</a></p>
               <p><a href="tel:05057141668" className="hover:text-white">0 (505) 714 16 68</a></p>
-              <p className="text-white/50">Pzt–Cum 08:00–18:00</p>
+              <p className="text-white/50">Pzt–Cum 09:00–18:00</p>
             </div>
             <div className="mt-3 flex gap-3">
               <a href="https://www.instagram.com/baskentdilkonusma" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-white/60 hover:text-white">

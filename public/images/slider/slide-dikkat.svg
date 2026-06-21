@@ -1,0 +1,91 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e8ff"/>
+      <stop offset="100%" style="stop-color:#e9d5ff"/>
+    </linearGradient>
+    <linearGradient id="brain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#6b21a8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bg3)"/>
+
+  <!-- Dekoratif daireler -->
+  <circle cx="700" cy="80" r="140" fill="#7c3aed" opacity="0.07"/>
+  <circle cx="100" cy="430" r="100" fill="#6b21a8" opacity="0.06"/>
+
+  <!-- Beyin illüstrasyonu (merkez) -->
+  <!-- Sol yarım küre -->
+  <path d="M260 180 C230 160 190 165 175 195 C160 225 165 255 180 270 C195 285 215 295 230 300 C240 315 250 330 260 340 L260 180Z" fill="url(#brain)" opacity="0.85"/>
+  <!-- Sağ yarım küre -->
+  <path d="M260 180 C290 160 330 165 345 195 C360 225 355 255 340 270 C325 285 305 295 290 300 C280 315 270 330 260 340 L260 180Z" fill="url(#brain)" opacity="0.75"/>
+  <!-- Beyin kıvrımları -->
+  <path d="M210 230 Q230 215 250 230 Q270 245 290 230" stroke="white" stroke-width="2.5" fill="none" opacity="0.4"/>
+  <path d="M195 270 Q220 255 245 270" stroke="white" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M275 260 Q295 245 315 260" stroke="white" stroke-width="2" fill="none" opacity="0.35"/>
+  <!-- Beyin ortası çizgisi -->
+  <line x1="260" y1="185" x2="260" y2="338" stroke="white" stroke-width="1.5" opacity="0.3" stroke-dasharray="4,3"/>
+
+  <!-- Odak halkaları (konsantrasyon) -->
+  <circle cx="260" cy="260" r="90" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.3" stroke-dasharray="6,4"/>
+  <circle cx="260" cy="260" r="130" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.2" stroke-dasharray="8,5"/>
+  <circle cx="260" cy="260" r="170" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.12" stroke-dasharray="10,6"/>
+
+  <!-- Nöron bağlantıları - kıvılcımlar -->
+  <circle cx="175" cy="195" r="6" fill="#f59e0b"/>
+  <circle cx="345" cy="195" r="6" fill="#f59e0b"/>
+  <circle cx="180" cy="270" r="5" fill="#10b981"/>
+  <circle cx="340" cy="270" r="5" fill="#10b981"/>
+  <circle cx="260" cy="175" r="7" fill="#f59e0b"/>
+
+  <!-- Işın çizgileri beyinden dışarı -->
+  <line x1="260" y1="168" x2="260" y2="145" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="169" y1="188" x2="150" y2="175" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+  <line x1="351" y1="188" x2="370" y2="175" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- MOXO ekranı (sağda) -->
+  <rect x="430" y="130" width="280" height="200" rx="16" fill="white" opacity="0.92" filter="drop-shadow(0 6px 18px rgba(0,0,0,0.12))"/>
+  <!-- Ekran başlık barı -->
+  <rect x="430" y="130" width="280" height="40" rx="16" fill="#6b21a8"/>
+  <rect x="430" y="150" width="280" height="20" fill="#6b21a8"/>
+  <text x="570" y="157" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">MOXO Dikkat Testi</text>
+  <!-- Ekran içeriği: bar chart -->
+  <rect x="460" y="200" width="30" height="90" rx="4" fill="#7c3aed" opacity="0.8"/>
+  <rect x="505" y="220" width="30" height="70" rx="4" fill="#7c3aed" opacity="0.6"/>
+  <rect x="550" y="190" width="30" height="100" rx="4" fill="#7c3aed" opacity="0.9"/>
+  <rect x="595" y="210" width="30" height="80" rx="4" fill="#7c3aed" opacity="0.7"/>
+  <rect x="640" y="195" width="30" height="95" rx="4" fill="#7c3aed" opacity="0.85"/>
+  <!-- Alt eksen -->
+  <line x1="450" y1="295" x2="685" y2="295" stroke="#ddd" stroke-width="1.5"/>
+  <text x="475" y="311" font-family="Arial, sans-serif" font-size="9" fill="#999" text-anchor="middle">DİKKAT</text>
+  <text x="520" y="311" font-family="Arial, sans-serif" font-size="9" fill="#999" text-anchor="middle">ZAMAN</text>
+  <text x="565" y="311" font-family="Arial, sans-serif" font-size="9" fill="#999" text-anchor="middle">HİPERAK.</text>
+  <text x="610" y="311" font-family="Arial, sans-serif" font-size="9" fill="#999" text-anchor="middle">İMPULS</text>
+  <text x="655" y="311" font-family="Arial, sans-serif" font-size="9" fill="#999" text-anchor="middle">TOPLAM</text>
+
+  <!-- Bilgi kartları alt -->
+  <rect x="430" y="355" width="130" height="80" rx="12" fill="white" opacity="0.9"/>
+  <text x="495" y="382" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#6b21a8" text-anchor="middle">7–14 Yaş</text>
+  <text x="495" y="400" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">Attentioner</text>
+  <text x="495" y="418" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">Programı</text>
+
+  <rect x="580" y="355" width="130" height="80" rx="12" fill="white" opacity="0.9"/>
+  <text x="645" y="382" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#6b21a8" text-anchor="middle">Nöropsikolojik</text>
+  <text x="645" y="400" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">Değerlendirme</text>
+  <text x="645" y="418" font-family="Arial, sans-serif" font-size="11" fill="#666" text-anchor="middle">& Eğitim</text>
+
+  <!-- Başlık -->
+  <rect x="30" y="30" width="250" height="50" rx="12" fill="#6b21a8" opacity="0.9"/>
+  <text x="155" y="62" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="white" text-anchor="middle">Dikkat Eğitimi &amp; MOXO</text>
+
+  <!-- Odak sembolü sol alt -->
+  <circle cx="130" cy="390" r="40" fill="none" stroke="#6b21a8" stroke-width="3" opacity="0.3"/>
+  <circle cx="130" cy="390" r="25" fill="none" stroke="#6b21a8" stroke-width="2.5" opacity="0.4"/>
+  <circle cx="130" cy="390" r="10" fill="#6b21a8" opacity="0.5"/>
+  <line x1="90" y1="390" x2="80" y2="390" stroke="#6b21a8" stroke-width="2" opacity="0.4"/>
+  <line x1="170" y1="390" x2="180" y2="390" stroke="#6b21a8" stroke-width="2" opacity="0.4"/>
+  <line x1="130" y1="350" x2="130" y2="340" stroke="#6b21a8" stroke-width="2" opacity="0.4"/>
+  <line x1="130" y1="430" x2="130" y2="440" stroke="#6b21a8" stroke-width="2" opacity="0.4"/>
+</svg>

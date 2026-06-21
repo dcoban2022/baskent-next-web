@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/dispraksi",
     "/dikkat-egitimi-moxo-dikkat-testi",
     "/isitme-engeli",
+    "/oyun-terapisi",
     "/bireysel-ve-grup-egitimi",
     "/iletisim",
     "/kvkk",

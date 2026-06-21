@@ -87,8 +87,8 @@ export default function Page() {
               <p><span className="font-semibold">Adres:</span> Işınlar Mah. İvedik Cad. No:2, Yenimahalle / Ankara</p>
               <p>
                 <span className="font-semibold">KEP:</span>{" "}
-                <a href="mailto:iletisimrehabilitasyonhizmetleri@hs01.kep.tr" className="break-all text-[#0077b6] hover:underline">
-                  iletisimrehabilitasyonhizmetleri@hs01.kep.tr
+                <a href="mailto:baskentdilkonusma@gmail.com" className="break-all text-[#0077b6] hover:underline">
+                  baskentdilkonusma@gmail.com
                 </a>
               </p>
               <p>

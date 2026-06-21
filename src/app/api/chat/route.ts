@@ -1,4 +1,50 @@
 import { NextRequest } from "next/server";
+import { Resend } from "resend";
+
+async function sendChatEmail(messages: { role: string; content: string }[], assistantReply: string) {
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const allMessages = [...messages, { role: "assistant", content: assistantReply }];
+
+    const rows = allMessages
+      .filter((m) => m.content)
+      .map((m) => {
+        const isUser = m.role === "user";
+        return `
+          <tr>
+            <td style="padding:10px 14px;vertical-align:top;width:80px">
+              <span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;${
+                isUser
+                  ? "background:#e0f0fa;color:#0077b6"
+                  : "background:#f0fdf4;color:#166534"
+              }">${isUser ? "Kullanıcı" : "AI"}</span>
+            </td>
+            <td style="padding:10px 14px;font-size:13px;color:#374151;line-height:1.6">${m.content.replace(/\n/g, "<br>")}</td>
+          </tr>`;
+      })
+      .join("<tr><td colspan='2' style='padding:0;border-bottom:1px solid #f3f4f6'></td></tr>");
+
+    await resend.emails.send({
+      from: "Başkent Dil Konuşma AI <serdar@updates.baskentdilkonusma.com>",
+      to: ["serdar@updates.baskentdilkonusma.com"],
+      bcc: ["deniz@denizcoban.com", "elif@elifcoban.com", "sipahise@gmail.com", "baskentdilkonusma@gmail.com"],
+      subject: `AI Sohbet — ${new Date().toLocaleString("tr-TR")}`,
+      html: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+          <div style="background:linear-gradient(135deg,#0077b6,#005f8e);padding:20px 28px;border-radius:12px 12px 0 0">
+            <h1 style="color:white;margin:0;font-size:18px">Başkent Dil Konuşma AI — Sohbet Kaydı</h1>
+            <p style="color:#b3d9f0;margin:4px 0 0;font-size:12px">${new Date().toLocaleString("tr-TR", { dateStyle: "long", timeStyle: "short" })}</p>
+          </div>
+          <div style="border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
+            <table style="width:100%;border-collapse:collapse">${rows}</table>
+          </div>
+        </div>
+      `,
+    });
+  } catch (err) {
+    console.error("Chat email error:", err);
+  }
+}
 
 const SYSTEM_PROMPT = `Sen Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi'nin yapay zeka asistanısın. Türkçe yanıt veriyorsun.
 
@@ -8,10 +54,10 @@ Merkez hakkında bilgiler:
 - Telefon: 0 (312) 344 93 16 (Ana Hat)
 - Kurum Müdürü: 0 (505) 714 16 68
 - Uzman Danışman: 0 (533) 573 45 64
-- E-posta: iletisimrehabilitasyonhizmetleri@hs01.kep.tr
+- E-posta: baskentdilkonusma@gmail.com
 - Instagram: @baskentdilkonusma
-- Çalışma saatleri: Pzt-Cuma 08:00-18:00, Cumartesi 09:00-14:00, Pazar kapalı
-- RAM raporlu bireyler için servis hizmeti ücretsizdir
+- Çalışma saatleri: Pzt-Cuma 09:00-18:00, Cumartesi 09:00-14:00, Pazar kapalı
+- RAM raporlu bireyler için eğitim hizmeti ücretsizdir; merkezden eve ve evden merkeze servis sunulmaktadır
 
 Hizmet alanları:
 1. Dil ve Konuşma Bozuklukları: Artikülasyon bozuklukları, dil gelişim gecikmesi, kekemelik, afazi, ses bozuklukları
@@ -33,7 +79,7 @@ Değerlendirme süreci:
 - Raporlama
 - Aile görüşmesi ve bilgilendirme
 - Bireysel eğitim programı hazırlama
-- RAM kanalıyla yönlendirme (ücretsiz servis imkânı)
+- RAM kanalıyla yönlendirme (ücretsiz eğitim ve servis imkânı)
 
 Kurallar:
 - Kısa, net ve samimi yanıtlar ver
@@ -84,6 +130,7 @@ export async function POST(req: NextRequest) {
     }
 
     const encoder = new TextEncoder();
+    let fullReply = "";
     const readable = new ReadableStream({
       async start(controller) {
         const reader = res.body!.getReader();
@@ -105,13 +152,22 @@ export async function POST(req: NextRequest) {
             try {
               const parsed = JSON.parse(json);
               const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (text) controller.enqueue(encoder.encode(text));
+              if (text) {
+                fullReply += text;
+                controller.enqueue(encoder.encode(text));
+              }
             } catch {
               // geçersiz JSON satırı atla
             }
           }
         }
         controller.close();
+
+        // Konuşmayı e-posta olarak gönder (sadece kullanıcı en az 1 mesaj gönderdiyse)
+        const userMessages = messages.filter((m: { role: string }) => m.role === "user");
+        if (userMessages.length >= 1 && fullReply) {
+          sendChatEmail(messages, fullReply);
+        }
       },
     });
 

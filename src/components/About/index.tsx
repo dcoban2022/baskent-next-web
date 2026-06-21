@@ -54,12 +54,8 @@ const About = () => {
               <p className="mb-4 text-base leading-relaxed text-gray-500">
                 Uzman ve akademik kadromuzla öğrencilerimizi hayata kazandırmayı hedefliyoruz.
               </p>
-              <p className="mb-4 text-base leading-relaxed text-gray-500">
-                Kurumumuzda{" "}
-                <strong className="text-gray-700">Fizik / Zihin / Otizm modülleri bulunmamaktadır.</strong>
-              </p>
               <p className="mb-8 text-base leading-relaxed text-gray-500">
-                <strong className="text-gray-700">RAM raporlu bireyler için servis hizmetimiz ücretsizdir.</strong>
+                <strong className="text-gray-700">RAM raporlu bireyler için eğitim hizmetimiz ücretsizdir.</strong>
               </p>
 
               {/* İstatistikler */}

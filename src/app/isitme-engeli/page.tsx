@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "İşitme Engeli Eğitimi — Başkent Dil Konuşma",
@@ -20,6 +21,13 @@ const hizmetler = [
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="İşitme Engeli Eğitimi"
+      description="1 yaşından itibaren işitme engeli rehabilitasyonu, dil-konuşma terapisi ve aile rehberliği."
+      url="https://www.baskentdilkonusma.com/isitme-engeli"
+      breadcrumbLabel="İşitme Engeli Eğitimi"
+    />
     <main className="pt-[116px]">
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
         <div className="container">
@@ -71,5 +79,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }

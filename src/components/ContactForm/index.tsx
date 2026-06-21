@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 
 export default function ContactForm() {
   const [form, setForm] = useState({ ad: "", telefon: "", email: "", konu: "", mesaj: "" });
@@ -19,7 +20,12 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      setStatus(res.ok ? "success" : "error");
+      if (res.ok) {
+        track("contact_form_submitted", { konu: form.konu || "belirtilmedi" });
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }

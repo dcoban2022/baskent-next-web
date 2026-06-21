@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "Dispraksi — Başkent Dil Konuşma",
@@ -9,6 +10,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="Dispraksi Eğitimi"
+      description="Motor koordinasyon gelişim bozukluğunda uzman eğitim ve destek programı."
+      url="https://www.baskentdilkonusma.com/dispraksi"
+      breadcrumbLabel="Dispraksi"
+    />
     <main className="pt-[116px]">
       <div className="bg-gradient-to-br from-[#fff5f5] to-white py-12">
         <div className="container">
@@ -99,5 +107,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }

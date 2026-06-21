@@ -40,8 +40,7 @@ const ulasim = [
 
 const bolgeler = [
   "Yenimahalle", "Keçiören", "Etimesgut", "Sincan",
-  "Çankaya", "Mamak", "Altındağ", "Pursaklar",
-  "Gölbaşı", "Polatlı",
+  "Çankaya", "Mamak", "Altındağ",
 ];
 
 export default function ServiceArea() {

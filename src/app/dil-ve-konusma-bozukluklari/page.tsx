@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ServiceSchema from "@/components/ServiceSchema";
 
 export const metadata: Metadata = {
   title: "Dil ve Konuşma Bozuklukları — Başkent Dil Konuşma",
@@ -20,6 +21,13 @@ const hizmetler = [
 
 export default function Page() {
   return (
+    <>
+    <ServiceSchema
+      name="Dil ve Konuşma Bozuklukları"
+      description="Artikülasyon bozuklukları, kekemelik, dil gelişim gecikmesi ve ses bozukluklarında uzman terapi hizmetleri. 1 yaşından itibaren erken müdahale."
+      url="https://www.baskentdilkonusma.com/dil-ve-konusma-bozukluklari"
+      breadcrumbLabel="Dil ve Konuşma Bozuklukları"
+    />
     <main className="pt-[116px]">
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
         <div className="container">
@@ -77,5 +85,6 @@ export default function Page() {
         </div>
       </div>
     </main>
+    </>
   );
 }
