@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Bireysel ve Grup Eğitimi — Başkent Dil Konuşma",
@@ -15,6 +17,19 @@ export const metadata: Metadata = {
     locale: "tr_TR",
   },
 };
+
+const related = [
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Dil ve Konuşma Bozuklukları", desc: "Konuşma terapisi hizmetleri", href: "/dil-ve-konusma-bozukluklari" },
+  { title: "İşitme Engeli Eğitimi", desc: "1 yaşından itibaren rehabilitasyon", href: "/isitme-engeli" },
+];
+
+const faqs = [
+  { soru: "RAM raporu nedir ve nasıl alınır?", cevap: "RAM (Rehberlik Araştırma Merkezi), çocuğun özel eğitime ihtiyacını belgeleyen resmi devlet kurumudur. Çocuğunuzu RAM'a yönlendirmek için bize başvurabilirsiniz." },
+  { soru: "RAM raporlu eğitim ücretsiz midir?", cevap: "RAM raporlu bireyler, Milli Eğitim Bakanlığı desteğiyle ayda 8 derse ücretsiz ulaşabilir. Servis hizmeti de ücretsizdir." },
+  { soru: "Bireysel ve grup eğitimi farkı nedir?", cevap: "Bireysel eğitim tamamen çocuğa özel BEP programıyla yürütülür. Grup eğitimi sosyal beceri gelişimi için ek destek sağlar." },
+  { soru: "BEP nedir?", cevap: "BEP, her çocuğun güçlü ve zayıf yönleri belirlenerek hazırlanan kişisel eğitim planıdır. Aileler, öğretmenler ve uzmanlar birlikte hazırlar." },
+];
 
 export default function Page() {
   return (
@@ -109,6 +124,10 @@ export default function Page() {
           </p>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#0077b6] py-10">
         <div className="container text-center">

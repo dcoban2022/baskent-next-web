@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Değerlendirme — Başkent Dil Konuşma",
@@ -32,6 +34,19 @@ const sonuclar = [
   "Dil konuşma güçlüğü veya Özel Öğrenme Güçlüğü/Disleksi engel yüzdesi hakkında bilgi verilir",
   "Aileler hastaneden rapor çıkartıp çıkartamayacakları konusunda bilgilendirilir",
   "Eğitim özel (ücretli) ya da RAM kanallı (destekli) olarak programlanır",
+];
+
+const related = [
+  { title: "Disleksi", desc: "Okuma güçlüğünde uzman eğitim", href: "/disleksi" },
+  { title: "Dil ve Konuşma Bozuklukları", desc: "Konuşma terapisi hizmetleri", href: "/dil-ve-konusma-bozukluklari" },
+  { title: "Bireysel ve Grup Eğitimi", desc: "RAM raporlu bireyler için", href: "/bireysel-ve-grup-egitimi" },
+];
+
+const faqs = [
+  { soru: "İlk değerlendirme ne kadar sürer?", cevap: "Kapsamlı ilk değerlendirme ortalama 60-90 dakika sürmektedir. Gerekirse 2 seansta tamamlanabilir." },
+  { soru: "Değerlendirme için randevu nasıl alınır?", cevap: "0 (312) 344 93 16 numaralı telefondan ya da web sitemizdeki iletişim formundan randevu alabilirsiniz." },
+  { soru: "Değerlendirme sonucunda ne olur?", cevap: "Uzmanımız bulguları ailenizle detaylı olarak paylaşır, eğitim programı önerir ve gerekirse RAM yönlendirmesi yapar." },
+  { soru: "TEDİL ve AAT testleri nelerdir?", cevap: "TEDİL (Türkçe Erken Dil Gelişim Testi) 2-7 yaş dil gelişimini ölçer. AAT (Ankara Artikülasyon Testi) konuşma sesi bozukluğunu saptamak için kullanılır." },
 ];
 
 export default function Page() {
@@ -168,6 +183,10 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       {/* CTA */}
       <div className="bg-[#0077b6] py-10">

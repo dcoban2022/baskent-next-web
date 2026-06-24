@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Disgrafi — Başkent Dil Konuşma",
@@ -36,6 +38,19 @@ const stratejiler = [
   "Alternatif ödev seçenekleri (video rapor, ses kaydı)",
   "Bilgisayar veya tablet ile yazma desteği",
   "Ek süre tanımak",
+];
+
+const related = [
+  { title: "Disleksi", desc: "Okuma güçlüğünde uzman eğitim", href: "/disleksi" },
+  { title: "Diskalkuli", desc: "Matematik güçlüğünde eğitim", href: "/diskalkuli" },
+  { title: "Dispraksi", desc: "Motor koordinasyon güçlüğü", href: "/dispraksi" },
+];
+
+const faqs = [
+  { soru: "Disgrafi ile kötü el yazısı aynı şey midir?", cevap: "Hayır, disgrafi yalnızca el yazısı kalitesiyle sınırlı değildir; yazma sürecinin tamamını etkileyen nörobilişsel bir bozukluktur." },
+  { soru: "Hangi yaşta eğitime başlanmalı?", cevap: "5-6 yaşından itibaren belirtiler net olduğunda erken müdahale çok daha etkili sonuçlar vermektedir." },
+  { soru: "Tedavi süreci nasıl işler?", cevap: "İnce motor beceri egzersizleri, duyusal entegrasyon çalışmaları ve yapılandırılmış yazma eğitimi birlikte uygulanır." },
+  { soru: "Disgrafi olan çocuklar sınıfta nasıl desteklenir?", cevap: "Ekstra süre, sözlü sınav alternatifi, klavye kullanımı ve not tutma desteği gibi uyumlar sağlanabilir." },
 ];
 
 export default function Page() {
@@ -97,6 +112,10 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#e63946] py-10">
         <div className="container text-center">

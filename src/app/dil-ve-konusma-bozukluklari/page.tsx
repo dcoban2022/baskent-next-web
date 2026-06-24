@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Dil ve Konuşma Bozuklukları — Başkent Dil Konuşma",
@@ -25,6 +27,19 @@ const hizmetler = [
   { baslik: "Edinsel Dil Bozuklukları", aciklama: "Beyin hasarı sonucu oluşan afazi; anlama ve ifade etme güçlükleri" },
   { baslik: "Damak Yarığı / Velofaringeal Yetmezlik", aciklama: "Damak yapısından kaynaklanan ses ve konuşma bozukluklarında özel terapi" },
   { baslik: "Yutma Bozuklukları", aciklama: "Disfaji; yutma mekanizmasındaki güçlüklerin değerlendirilmesi ve tedavisi" },
+];
+
+const related = [
+  { title: "İşitme Engeli Eğitimi", desc: "1 yaşından itibaren rehabilitasyon", href: "/isitme-engeli" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Oyun Terapisi", desc: "3–12 yaş için terapi", href: "/oyun-terapisi" },
+];
+
+const faqs = [
+  { soru: "Çocuğum kaç yaşında konuşmaya başlamalıdır?", cevap: "Genellikle 12-18. ayda ilk kelimeler, 2 yaşında 2-3 kelimeli cümleler beklenir. Bu tarihlerde konuşma yoksa uzman değerlendirmesi önerilir." },
+  { soru: "Kekemelik tedavi edilebilir mi?", cevap: "Evet. Özellikle 2-6 yaş arasında başlanan Lidcombe yöntemi ve diğer akıcılık terapileri çok etkilidir." },
+  { soru: "Dil terapisi kaç seans sürer?", cevap: "Bozukluğun türü ve şiddetine göre değişir. Hafif vakalarda 3-6 ay, daha karmaşık durumlarda 1-2 yıl sürebilir." },
+  { soru: "Erken müdahale neden önemlidir?", cevap: "Beyin, küçük yaşlarda çok daha plastiktir. Erken başlanan terapi dil gelişimini hızlandırır ve okul başarısını olumlu etkiler." },
 ];
 
 export default function Page() {
@@ -84,6 +99,10 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#0077b6] py-10">
         <div className="container text-center">

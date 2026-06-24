@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Dispraksi — Başkent Dil Konuşma",
@@ -15,6 +17,19 @@ export const metadata: Metadata = {
     locale: "tr_TR",
   },
 };
+
+const related = [
+  { title: "Disleksi", desc: "Okuma güçlüğünde uzman eğitim", href: "/disleksi" },
+  { title: "Disgrafi", desc: "Yazma güçlüğünde uzman destek", href: "/disgrafi" },
+  { title: "Bireysel ve Grup Eğitimi", desc: "RAM raporlu bireyler için", href: "/bireysel-ve-grup-egitimi" },
+];
+
+const faqs = [
+  { soru: "Dispraksi nedir?", cevap: "Dispraksi (DCD - Gelişimsel Koordinasyon Bozukluğu), motor becerilerin planlanması ve uygulanmasında güçlük yaşanan bir gelişimsel bozukluktur." },
+  { soru: "Dispraksi disleksi ile birlikte görülebilir mi?", cevap: "Evet, dispraksi sıklıkla disleksi, dikkat eksikliği ve disgrafi ile birlikte görülür." },
+  { soru: "Eğitim ne kadar sürer?", cevap: "Program bireye göre tasarlanır. Çoğu çocukta 6-12 ay düzenli çalışmayla belirgin gelişim gözlemlenir." },
+  { soru: "Okul hayatına etkisi nedir?", cevap: "Beden eğitimi, el yazısı, araç-gereç kullanımı ve sınıf içi geçişlerde güçlük yaşanabilir." },
+];
 
 export default function Page() {
   return (
@@ -106,6 +121,10 @@ export default function Page() {
           </p>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#e63946] py-10">
         <div className="container text-center">

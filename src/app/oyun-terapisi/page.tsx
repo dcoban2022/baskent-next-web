@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Oyun Terapisi — Başkent Dil Konuşma",
@@ -33,6 +35,19 @@ const kimlerIcin = [
   { title: "Sosyal Beceri Eksikliği", desc: "Akranlarıyla ilişki kurmakta zorlanan çocuklar" },
   { title: "Travma Sonrası Destek", desc: "Boşanma, kayıp veya zorlu yaşam olayları yaşayan çocuklar" },
   { title: "Dikkat Güçlükleri", desc: "DEHB belirtileri gösteren ve dikkatini toplamakta zorlanan çocuklar" },
+];
+
+const related = [
+  { title: "Dil ve Konuşma Bozuklukları", desc: "Konuşma terapisi hizmetleri", href: "/dil-ve-konusma-bozukluklari" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Bireysel ve Grup Eğitimi", desc: "RAM raporlu bireyler için", href: "/bireysel-ve-grup-egitimi" },
+];
+
+const faqs = [
+  { soru: "Oyun terapisi kaç yaşındaki çocuklara uygulanır?", cevap: "Genellikle 3-12 yaş arası çocuklara uygulanır. Daha büyük çocuklar için farklı terapi modelleri kullanılabilir." },
+  { soru: "Oyun terapisi normal oyundan farkı nedir?", cevap: "Oyun terapisi yapılandırılmış, terapötik amaçlı bir süreçtir. Terapist, oyun sırasında çocuğun duygusal ve davranışsal örüntülerini gözlemler ve yönlendirir." },
+  { soru: "Oyun terapisi kaç seans sürer?", cevap: "Sorunun türüne ve yoğunluğuna göre değişir. Ortalama 10-20 seans önerilmekle birlikte bazı durumlarda daha uzun sürebilir." },
+  { soru: "Hangi durumlarda oyun terapisi önerilir?", cevap: "Kaygı, korku, öfke sorunları, sosyal uyum güçlüğü, travma yaşantısı, boşanma süreci veya kardeş kıskançlığı gibi durumlarda etkilidir." },
 ];
 
 export default function Page() {
@@ -155,6 +170,10 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
+
+      <ServiceFAQ items={faqs} />
 
       {/* CTA */}
       <div className="bg-[#0077b6] py-10">
