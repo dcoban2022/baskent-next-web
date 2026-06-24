@@ -76,7 +76,7 @@ const services = [
     href: "/bireysel-ve-grup-egitimi",
     category: "Diğer",
     color: "#6b21a8",
-    image: "/images/services/grup.webp",
+    image: "/images/services/oyun-terapisi.jpg",
   },
   {
     id: 9,
