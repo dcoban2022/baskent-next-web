@@ -97,7 +97,7 @@ export default function Page() {
                     alt="Oyun Terapisi"
                     width={600}
                     height={400}
-                    className="h-72 w-full object-cover lg:h-80"
+                    className="h-72 w-full object-cover object-bottom lg:h-80"
                   />
                   <div className="absolute bottom-4 left-4 z-10 rounded-xl bg-white/90 px-4 py-3 shadow-lg backdrop-blur-sm">
                     <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Yaş Aralığı</p>

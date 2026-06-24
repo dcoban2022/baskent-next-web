@@ -121,6 +121,12 @@ const menuData: Menu[] = [
         path: "/degerlendirme",
         newTab: false,
       },
+      {
+        id: 310,
+        title: "Oyun Terapisi",
+        path: "/oyun-terapisi",
+        newTab: false,
+      },
     ],
   },
   {
