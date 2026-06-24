@@ -93,7 +93,7 @@ export default function Page() {
                 <div className="absolute -bottom-4 -left-4 h-full w-full rounded-3xl bg-[#e63946]/10" />
                 <div className="relative overflow-hidden rounded-3xl shadow-xl">
                   <Image
-                    src="/images/services/oyun-terapisi.webp"
+                    src="/images/services/oyun-terapisi.jpg"
                     alt="Oyun Terapisi"
                     width={600}
                     height={400}
