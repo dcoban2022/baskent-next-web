@@ -30,12 +30,20 @@ export default function VideoModal({ isOpen, onClose, ...props }: PropsType) {
       <div className="relative w-full max-w-4xl bg-gray-900">
         <button
           onClick={onClose}
+          aria-label="Kapat"
           className="absolute -top-2 -right-4 translate-x-full text-7xl leading-none text-white cursor-pointer"
         >
-          <span className="sr-only">Close modal</span>
           &times;
         </button>
-        <iframe width="100%" height="500" src={src} allowFullScreen />
+        <iframe
+          width="100%"
+          height="500"
+          src={src}
+          title="Video oynatıcı"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
       </div>
     </div>,
     document.body,
