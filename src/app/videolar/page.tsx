@@ -4,6 +4,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Videolar — Başkent Dil Konuşma",
   description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/videolar" },
+  openGraph: {
+    title: "Videolar — Başkent Dil Konuşma",
+    description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
+    url: "https://www.baskentdilkonusma.com/videolar",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const bilgiler = [

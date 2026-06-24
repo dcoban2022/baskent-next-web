@@ -2,6 +2,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "KVKK - Kişisel Verilerin Korunması — Başkent Dil Konuşma",
+  description: "Başkent Dil Konuşma Merkezi kişisel verilerin korunması kanunu (KVKK) kapsamında aydınlatma metni.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/kvkk" },
+  openGraph: {
+    title: "KVKK - Kişisel Verilerin Korunması — Başkent Dil Konuşma",
+    description: "Başkent Dil Konuşma Merkezi kişisel verilerin korunması kanunu (KVKK) kapsamında aydınlatma metni.",
+    url: "https://www.baskentdilkonusma.com/kvkk",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

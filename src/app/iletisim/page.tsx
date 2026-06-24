@@ -5,6 +5,14 @@ import ContactForm from "@/components/ContactForm";
 export const metadata: Metadata = {
   title: "İletişim — Başkent Dil Konuşma",
   description: "Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi iletişim bilgileri, adres ve konum.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/iletisim" },
+  openGraph: {
+    title: "İletişim — Başkent Dil Konuşma",
+    description: "Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi iletişim bilgileri, adres ve konum.",
+    url: "https://www.baskentdilkonusma.com/iletisim",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

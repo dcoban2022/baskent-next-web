@@ -5,8 +5,13 @@ export const metadata: Metadata = {
   title: "Kariyer — Başkent Dil Konuşma",
   description:
     "Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi'nde kariyer fırsatları. Dil ve konuşma terapisti, özel eğitim öğretmeni ve diğer pozisyonlar için başvurun.",
-  alternates: {
-    canonical: "https://www.baskentdilkonusma.com/kariyer",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/kariyer" },
+  openGraph: {
+    title: "Kariyer — Başkent Dil Konuşma",
+    description: "Başkent Dil Konuşma Özel Eğitim ve Rehabilitasyon Merkezi'nde kariyer fırsatları.",
+    url: "https://www.baskentdilkonusma.com/kariyer",
+    type: "website",
+    locale: "tr_TR",
   },
 };
 

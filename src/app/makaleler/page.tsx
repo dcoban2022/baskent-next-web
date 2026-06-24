@@ -5,6 +5,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Makaleler — Başkent Dil Konuşma",
   description: "Dil, konuşma ve öğrenme güçlükleri hakkında uzman makaleler.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/makaleler" },
+  openGraph: {
+    title: "Makaleler — Başkent Dil Konuşma",
+    description: "Dil, konuşma ve öğrenme güçlükleri hakkında uzman makaleler.",
+    url: "https://www.baskentdilkonusma.com/makaleler",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const articles = [

@@ -5,6 +5,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Hakkımızda — Başkent Dil Konuşma",
   description: "2004 yılından bu yana özel eğitim sektöründe hizmet veren Başkent Dil Konuşma Merkezi hakkında bilgi edinin.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/hakkimizda" },
+  openGraph: {
+    title: "Hakkımızda — Başkent Dil Konuşma",
+    description: "2004 yılından bu yana özel eğitim sektöründe hizmet veren Başkent Dil Konuşma Merkezi hakkında bilgi edinin.",
+    url: "https://www.baskentdilkonusma.com/hakkimizda",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const stats = [

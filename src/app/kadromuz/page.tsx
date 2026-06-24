@@ -4,6 +4,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Kadromuz — Başkent Dil Konuşma",
   description: "Başkent Dil Konuşma Merkezi uzman ve akademik kadrosu.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/kadromuz" },
+  openGraph: {
+    title: "Kadromuz — Başkent Dil Konuşma",
+    description: "Başkent Dil Konuşma Merkezi uzman ve akademik kadrosu.",
+    url: "https://www.baskentdilkonusma.com/kadromuz",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const yonetim = [
