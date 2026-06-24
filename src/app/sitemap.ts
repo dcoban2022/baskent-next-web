@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/oyun-terapisi",
     "/bireysel-ve-grup-egitimi",
     "/iletisim",
+    "/kariyer",
     "/kvkk",
   ];
 

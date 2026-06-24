@@ -6,6 +6,7 @@ const kurumsal = [
   { title: "Kadromuz", href: "/kadromuz" },
   { title: "Galeri", href: "/galeri" },
   { title: "Makaleler", href: "/makaleler" },
+  { title: "Kariyer", href: "/kariyer" },
   { title: "KVKK", href: "/kvkk" },
   { title: "İletişim", href: "/iletisim" },
 ];
