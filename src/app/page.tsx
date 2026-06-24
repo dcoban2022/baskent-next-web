@@ -18,6 +18,7 @@ import LatestArticles from "@/components/LatestArticles";
 import FamilyTestimonials from "@/components/FamilyTestimonials";
 import VideoGallery from "@/components/VideoGallery";
 import Contact from "@/components/Contact";
+import WaveDivider from "@/components/WaveDivider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -52,10 +53,13 @@ export default function Home() {
       <ScrollUp />
       <Slider />
       <StatsBar />
+      <WaveDivider from="#0077b6" to="#f9fafb" />
       <TrustBand />
       <Services />
       <HowItWorks />
+      <WaveDivider from="#ffffff" to="#e63946" />
       <CTABand />
+      <WaveDivider from="#e63946" to="#ffffff" />
       <WhyUs />
       <SymptomChecker />
       <TeamPreview />
