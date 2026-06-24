@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
 
 export const metadata: Metadata = {
   title: "Disleksi — Başkent Dil Konuşma",
@@ -25,6 +26,13 @@ const gucluyonler = [
   "Sanatta ve müzikte yetenek",
   "Problem çözme ve yaratıcılık",
   "Bütüncül bakış açısı",
+];
+
+const faqs = [
+  { soru: "Disleksi kaç yaşında anlaşılır?", cevap: "6 yaşından itibaren formal değerlendirme yapılabilir, ancak 3-4 yaşından itibaren erken belirtiler gözlemlenebilir." },
+  { soru: "Disleksi zeka düzeyi ile ilgili midir?", cevap: "Hayır, disleksi zekayla ilişkili değildir. Zekası ortalama ve üstü olan bireylerde de görülür." },
+  { soru: "Disleksi tedavi edilebilir mi?", cevap: "Tam anlamıyla 'tedavi' edilmez ancak doğru eğitimle okuma ve yazma becerileri büyük ölçüde geliştirilebilir." },
+  { soru: "Eğitim ne kadar sürer?", cevap: "Bireyden bireye değişmekle birlikte ortalama 6 ay - 2 yıl arasında düzenli eğitim önerilir." },
 ];
 
 export default function Page() {
@@ -95,6 +103,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#e63946] py-10">
         <div className="container text-center">

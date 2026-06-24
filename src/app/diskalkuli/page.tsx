@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
 
 export const metadata: Metadata = {
   title: "Diskalkuli — Başkent Dil Konuşma",
@@ -28,6 +29,13 @@ const stratejiler = [
   "Somut materyallerle (sayı blokları vb.) öğretim",
   "Hesap makinesi kullanımına izin vermek",
   "Adım adım görsel algoritmalar oluşturmak",
+];
+
+const faqs = [
+  { soru: "Diskalkuli nedir, disleksi ile farkı nedir?", cevap: "Disleksi okuma güçlüğü, diskalkuli ise sayı ve matematikte güçlüktür. Birlikte görülebilirler ancak farklı bozukluklardır." },
+  { soru: "Diskalkuli kalıcı mıdır?", cevap: "Erken tanı ve doğru eğitimle matematikte ciddi ilerleme sağlanabilir; eğitim süresi kısa tutulmamalıdır." },
+  { soru: "Kaç yaşından itibaren eğitime başlanabilir?", cevap: "Okul öncesi dönemden (5-6 yaş) itibaren sayı kavramı çalışmaları başlatılabilir." },
+  { soru: "Diskalkuli hangi testlerle teşhis edilir?", cevap: "20 maddelik Diskalkuli Değerlendirme Testi ve çeşitli sayı işleme testleri kullanılır." },
 ];
 
 export default function Page() {
@@ -92,6 +100,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#e63946] py-10">
         <div className="container text-center">

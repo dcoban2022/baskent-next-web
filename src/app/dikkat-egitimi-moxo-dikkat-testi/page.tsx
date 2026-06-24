@@ -2,11 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
 
 export const metadata: Metadata = {
   title: "Dikkat Eğitimi & MOXO Dikkat Testi — Başkent Dil Konuşma",
   description: "7-14 yaş için Attentioner dikkat programı ve 6-70 yaş için MOXO bilgisayar destekli dikkat testi.",
 };
+
+const faqs = [
+  { soru: "MOXO testi nedir?", cevap: "MOXO, 6-70 yaş arası bireylerde dikkat, zamanlama, dürtüsellik ve hiperaktiviteyi ölçen bilgisayar destekli standart bir dikkat testidir." },
+  { soru: "MOXO testi DEHB teşhisi için yeterli midir?", cevap: "MOXO tek başına teşhis koymaz; psikiyatrist veya çocuk psikologu değerlendirmesiyle birlikte kullanılır." },
+  { soru: "Attentioner programı kimler için uygundur?", cevap: "7-14 yaş arası, dikkat eksikliği ve DEHB belirtileri olan çocuklar için tasarlanmış bilgisayar destekli bireysel eğitim programıdır." },
+  { soru: "İlaç kullanmadan dikkat eğitimi işe yarar mı?", cevap: "Evet. Dikkat eğitimi programları ilaçsız süreçte ya da ilaç tedavisiyle birlikte etkili bir destek sağlamaktadır." },
+];
 
 export default function Page() {
   return (
@@ -101,6 +109,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-purple-700 py-10">
         <div className="container text-center">

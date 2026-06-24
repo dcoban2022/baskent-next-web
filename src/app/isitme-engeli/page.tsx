@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
+import ServiceFAQ from "@/components/ServiceFAQ";
 
 export const metadata: Metadata = {
   title: "İşitme Engeli Eğitimi — Başkent Dil Konuşma",
@@ -17,6 +18,13 @@ const hizmetler = [
   { baslik: "Bilişsel / Dil Gelişimi", aciklama: "Kavram gelişimi, bellek ve dil işlemleme becerilerinin desteklenmesi" },
   { baslik: "Koklear İmplant Rehabilitasyonu", aciklama: "Ameliyat öncesi hazırlık ve sonrası yoğun işitsel-sözel terapi programı" },
   { baslik: "İşitsel-Sözel Terapi", aciklama: "Sözlü dili temel alan, dinleme ve konuşma becerilerine odaklanan terapi yaklaşımı" },
+];
+
+const faqs = [
+  { soru: "İşitme cihazı takan çocuklar konuşabilir mi?", cevap: "Evet. Erken dönemde (0-3 yaş) cihazlanma ve yoğun işitsel-sözel terapi ile çocuklar normal konuşma düzeyine ulaşabilir." },
+  { soru: "Koklear implant için ideal yaş nedir?", cevap: "Kalıcı derin işitme kayıplarında 12-18 ay önerilmektedir. Erken ameliyat ve rehabilitasyon dil gelişimini önemli ölçüde destekler." },
+  { soru: "İşitme engelli çocuklar için terapi ne kadar sürer?", cevap: "İlk yıllarda yoğun terapi (haftada 2-3 seans) önerilir. İlerlemeye göre seans sayısı azaltılır." },
+  { soru: "Aile terapiye nasıl dahil olur?", cevap: "Ebeveyn rehberliği programımızda aileler seans içinde aktif rol alır ve evde uygulanacak aktiviteler öğrenir." },
 ];
 
 export default function Page() {
@@ -70,6 +78,8 @@ export default function Page() {
           ))}
         </div>
       </section>
+
+      <ServiceFAQ items={faqs} />
 
       <div className="bg-[#0077b6] py-10">
         <div className="container text-center">

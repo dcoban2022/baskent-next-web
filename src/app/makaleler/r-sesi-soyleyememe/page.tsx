@@ -9,6 +9,21 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="pt-[116px]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: "'R' Sesini Söyleyememe",
+            description: "Çocuklarda R sesini söyleyememe nedenleri, belirtileri ve dil-konuşma terapisi ile tedavi yöntemleri.",
+            url: "https://www.baskentdilkonusma.com/makaleler/r-sesi-soyleyememe",
+            datePublished: "2024-03-11",
+            author: { "@type": "Organization", name: "Başkent Dil Konuşma Merkezi" },
+            publisher: { "@type": "Organization", name: "Başkent Dil Konuşma Merkezi", url: "https://www.baskentdilkonusma.com" },
+          }),
+        }}
+      />
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-10">
         <div className="container">
           <Link href="/makaleler" className="mb-6 inline-flex items-center gap-2 text-sm text-[#0077b6] hover:underline">
