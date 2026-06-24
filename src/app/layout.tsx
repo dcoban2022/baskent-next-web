@@ -21,7 +21,6 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="tr">
       <head>
         <link rel="icon" href="/images/logo/baskent-logo.png" type="image/png" />
-        <link rel="canonical" href="https://www.baskentdilkonusma.com" />
         <meta name="google-site-verification" content="mQI1vXXZwdhiA_KEKthEsKulcLGjCrxuPYdQu2HM8AQ" />
         <meta property="og:site_name" content="Başkent Dil Konuşma" />
         <meta property="og:image" content="https://www.baskentdilkonusma.com/images/logo/baskent-logo.png" />

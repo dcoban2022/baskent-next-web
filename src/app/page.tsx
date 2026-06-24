@@ -12,7 +12,6 @@ import About from "@/components/About";
 import PartnerLogos from "@/components/PartnerLogos";
 import FAQ from "@/components/FAQ";
 import FAQSchema from "@/components/FAQ/FAQSchema";
-import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import MapSection from "@/components/MapSection";
 import ServiceArea from "@/components/ServiceArea";
 import LatestArticles from "@/components/LatestArticles";
@@ -62,7 +61,6 @@ export default function Home() {
       <TeamPreview />
       <About />
       <PartnerLogos />
-      <LocalBusinessSchema />
       <FAQSchema />
       <FAQ />
       <MapSection />
