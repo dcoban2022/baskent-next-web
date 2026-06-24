@@ -4,6 +4,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Videolar — Başkent Dil Konuşma",
   description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/videolar" },
+  openGraph: {
+    title: "Videolar — Başkent Dil Konuşma",
+    description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
+    url: "https://www.baskentdilkonusma.com/videolar",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const bilgiler = [
@@ -44,6 +52,60 @@ const videoSayisi = 4;
 export default function Page() {
   return (
     <main className="pt-[116px]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Başkent Dil Konuşma Eğitici Videoları",
+            description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
+            url: "https://www.baskentdilkonusma.com/videolar",
+            numberOfItems: 3,
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                item: {
+                  "@type": "VideoObject",
+                  name: "Disleksi Nedir?",
+                  description: "Disleksi, beyinde biyolojik temelli okumayı etkileyen bir çeşit özgül öğrenme bozukluğudur. Kelimeyi doğru/akıcı tanımada zorluklar ve heceleme güçlükleri ile karakterizedir.",
+                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/services/disleksi.webp",
+                  uploadDate: "2024-03-11",
+                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
+                  url: "https://www.instagram.com/baskentdilkonusma/",
+                },
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                item: {
+                  "@type": "VideoObject",
+                  name: "Matematik Güçlüğü (Diskalkuli) Nedir?",
+                  description: "Diskalkuli, kişinin sayıları anlama ve matematik öğrenme yeteneğini etkileyen bir öğrenme güçlüğüdür.",
+                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/services/bireysel.webp",
+                  uploadDate: "2024-03-11",
+                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
+                  url: "https://www.instagram.com/baskentdilkonusma/",
+                },
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                item: {
+                  "@type": "VideoObject",
+                  name: "Yazma Güçlüğü (Disgrafi) Nedir?",
+                  description: "Disgrafi, bireyin el yazısı ve ince motor becerilerini etkileyen, yazma sürecini zorlaştıran bir öğrenme güçlüğüdür.",
+                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/slider/slider-2.webp",
+                  uploadDate: "2024-03-11",
+                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
+                  url: "https://www.instagram.com/baskentdilkonusma/",
+                },
+              },
+            ],
+          }),
+        }}
+      />
       {/* Hero */}
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
         <div className="container text-center">

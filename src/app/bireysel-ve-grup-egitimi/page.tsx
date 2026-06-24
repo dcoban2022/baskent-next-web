@@ -3,11 +3,18 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Bireysel ve Grup Eğitimi — Başkent Dil Konuşma",
   description: "RAM raporlu bireyler için ayda 8 ders bireysel ve grup eğitimi. BEP programı ve ücretsiz servis.",
 };
+
+const related = [
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Dil ve Konuşma Bozuklukları", desc: "Konuşma terapisi hizmetleri", href: "/dil-ve-konusma-bozukluklari" },
+  { title: "İşitme Engeli Eğitimi", desc: "1 yaşından itibaren rehabilitasyon", href: "/isitme-engeli" },
+];
 
 const faqs = [
   { soru: "RAM raporu nedir ve nasıl alınır?", cevap: "RAM (Rehberlik Araştırma Merkezi), çocuğun özel eğitime ihtiyacını belgeleyen resmi devlet kurumudur. Çocuğunuzu RAM'a yönlendirmek için bize başvurabilirsiniz." },
@@ -109,6 +116,8 @@ export default function Page() {
           </p>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 

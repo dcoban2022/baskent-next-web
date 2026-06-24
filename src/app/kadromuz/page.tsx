@@ -162,6 +162,54 @@ function MemberCard({ member, large = false }: { member: Member; large?: boolean
 export default function Page() {
   return (
     <main className="pt-[116px]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Başkent Dil Konuşma Merkezi Uzman Kadrosu",
+            url: "https://www.baskentdilkonusma.com/kadromuz",
+            itemListElement: [
+              ...yonetim.map((m, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                item: {
+                  "@type": "Person",
+                  name: m.name,
+                  jobTitle: m.title,
+                  image: `https://www.baskentdilkonusma.com${m.image}`,
+                  worksFor: { "@type": "MedicalOrganization", name: "Başkent Dil Konuşma Merkezi", url: "https://www.baskentdilkonusma.com" },
+                  ...(m.spec ? { knowsAbout: m.spec } : {}),
+                },
+              })),
+              ...uzmanlar.map((m, i) => ({
+                "@type": "ListItem",
+                position: yonetim.length + i + 1,
+                item: {
+                  "@type": "Person",
+                  name: m.name,
+                  jobTitle: m.title,
+                  image: `https://www.baskentdilkonusma.com${m.image}`,
+                  worksFor: { "@type": "MedicalOrganization", name: "Başkent Dil Konuşma Merkezi", url: "https://www.baskentdilkonusma.com" },
+                  ...(m.spec ? { knowsAbout: m.spec } : {}),
+                },
+              })),
+              ...ogretmenler.map((m, i) => ({
+                "@type": "ListItem",
+                position: yonetim.length + uzmanlar.length + i + 1,
+                item: {
+                  "@type": "Person",
+                  name: m.name,
+                  jobTitle: m.title,
+                  image: `https://www.baskentdilkonusma.com${m.image}`,
+                  worksFor: { "@type": "MedicalOrganization", name: "Başkent Dil Konuşma Merkezi", url: "https://www.baskentdilkonusma.com" },
+                },
+              })),
+            ],
+          }),
+        }}
+      />
       {/* Hero */}
       <div className="bg-gradient-to-br from-[#f0f7ff] to-white py-12">
         <div className="container text-center">

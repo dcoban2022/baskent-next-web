@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Disgrafi — Başkent Dil Konuşma",
@@ -29,6 +30,12 @@ const stratejiler = [
   "Alternatif ödev seçenekleri (video rapor, ses kaydı)",
   "Bilgisayar veya tablet ile yazma desteği",
   "Ek süre tanımak",
+];
+
+const related = [
+  { title: "Disleksi", desc: "Okuma güçlüğünde uzman eğitim", href: "/disleksi" },
+  { title: "Diskalkuli", desc: "Matematik güçlüğünde eğitim", href: "/diskalkuli" },
+  { title: "Dispraksi", desc: "Motor koordinasyon güçlüğü", href: "/dispraksi" },
 ];
 
 const faqs = [
@@ -97,6 +104,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 

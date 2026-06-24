@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Disleksi — Başkent Dil Konuşma",
@@ -26,6 +27,12 @@ const gucluyonler = [
   "Sanatta ve müzikte yetenek",
   "Problem çözme ve yaratıcılık",
   "Bütüncül bakış açısı",
+];
+
+const related = [
+  { title: "Disgrafi", desc: "Yazma güçlüğünde uzman destek", href: "/disgrafi" },
+  { title: "Diskalkuli", desc: "Matematik güçlüğünde eğitim", href: "/diskalkuli" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
 ];
 
 const faqs = [
@@ -103,6 +110,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Oyun Terapisi — Başkent Dil Konuşma",
@@ -26,6 +27,12 @@ const kimlerIcin = [
   { title: "Sosyal Beceri Eksikliği", desc: "Akranlarıyla ilişki kurmakta zorlanan çocuklar" },
   { title: "Travma Sonrası Destek", desc: "Boşanma, kayıp veya zorlu yaşam olayları yaşayan çocuklar" },
   { title: "Dikkat Güçlükleri", desc: "DEHB belirtileri gösteren ve dikkatini toplamakta zorlanan çocuklar" },
+];
+
+const related = [
+  { title: "Dil ve Konuşma Bozuklukları", desc: "Konuşma terapisi hizmetleri", href: "/dil-ve-konusma-bozukluklari" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Bireysel ve Grup Eğitimi", desc: "RAM raporlu bireyler için", href: "/bireysel-ve-grup-egitimi" },
 ];
 
 const faqs = [
@@ -155,6 +162,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 

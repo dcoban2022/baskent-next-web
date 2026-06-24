@@ -3,11 +3,18 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Dikkat Eğitimi & MOXO Dikkat Testi — Başkent Dil Konuşma",
   description: "7-14 yaş için Attentioner dikkat programı ve 6-70 yaş için MOXO bilgisayar destekli dikkat testi.",
 };
+
+const related = [
+  { title: "Disleksi", desc: "Öğrenme güçlüğünde uzman eğitim", href: "/disleksi" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Bireysel ve Grup Eğitimi", desc: "RAM raporlu bireyler için", href: "/bireysel-ve-grup-egitimi" },
+];
 
 const faqs = [
   { soru: "MOXO testi nedir?", cevap: "MOXO, 6-70 yaş arası bireylerde dikkat, zamanlama, dürtüsellik ve hiperaktiviteyi ölçen bilgisayar destekli standart bir dikkat testidir." },
@@ -109,6 +116,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 

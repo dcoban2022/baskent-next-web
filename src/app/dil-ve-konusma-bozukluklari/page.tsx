@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import ServiceSchema from "@/components/ServiceSchema";
 import ServiceFAQ from "@/components/ServiceFAQ";
+import RelatedServices from "@/components/RelatedServices";
 
 export const metadata: Metadata = {
   title: "Dil ve Konuşma Bozuklukları — Başkent Dil Konuşma",
@@ -18,6 +19,12 @@ const hizmetler = [
   { baslik: "Edinsel Dil Bozuklukları", aciklama: "Beyin hasarı sonucu oluşan afazi; anlama ve ifade etme güçlükleri" },
   { baslik: "Damak Yarığı / Velofaringeal Yetmezlik", aciklama: "Damak yapısından kaynaklanan ses ve konuşma bozukluklarında özel terapi" },
   { baslik: "Yutma Bozuklukları", aciklama: "Disfaji; yutma mekanizmasındaki güçlüklerin değerlendirilmesi ve tedavisi" },
+];
+
+const related = [
+  { title: "İşitme Engeli Eğitimi", desc: "1 yaşından itibaren rehabilitasyon", href: "/isitme-engeli" },
+  { title: "Değerlendirme", desc: "Kapsamlı ilk değerlendirme", href: "/degerlendirme" },
+  { title: "Oyun Terapisi", desc: "3–12 yaş için terapi", href: "/oyun-terapisi" },
 ];
 
 const faqs = [
@@ -84,6 +91,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <RelatedServices items={related} />
 
       <ServiceFAQ items={faqs} />
 
