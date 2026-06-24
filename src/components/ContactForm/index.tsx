@@ -52,24 +52,24 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">Ad Soyad <span className="text-red-500">*</span></label>
-          <input name="ad" value={form.ad} onChange={handleChange} required type="text" placeholder="Adınız Soyadınız"
+          <label htmlFor="contact-ad" className="mb-1.5 block text-sm font-medium text-gray-700">Ad Soyad <span className="text-red-500">*</span></label>
+          <input id="contact-ad" name="ad" value={form.ad} onChange={handleChange} required type="text" placeholder="Adınız Soyadınız"
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20" />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">Telefon</label>
-          <input name="telefon" value={form.telefon} onChange={handleChange} type="tel" placeholder="0 5XX XXX XX XX"
+          <label htmlFor="contact-telefon" className="mb-1.5 block text-sm font-medium text-gray-700">Telefon</label>
+          <input id="contact-telefon" name="telefon" value={form.telefon} onChange={handleChange} type="tel" placeholder="0 5XX XXX XX XX" pattern="[0-9\s\(\)\+]{10,15}"
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20" />
         </div>
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">E-posta</label>
-        <input name="email" value={form.email} onChange={handleChange} type="email" placeholder="ornek@email.com"
+        <label htmlFor="contact-email" className="mb-1.5 block text-sm font-medium text-gray-700">E-posta</label>
+        <input id="contact-email" name="email" value={form.email} onChange={handleChange} type="email" placeholder="ornek@email.com"
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20" />
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">Konu</label>
-        <select name="konu" value={form.konu} onChange={handleChange}
+        <label htmlFor="contact-konu" className="mb-1.5 block text-sm font-medium text-gray-700">Konu</label>
+        <select id="contact-konu" name="konu" value={form.konu} onChange={handleChange}
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20">
           <option value="">Konu seçiniz</option>
           <option>Dil ve Konuşma Bozuklukları</option>
@@ -85,8 +85,8 @@ export default function ContactForm() {
         </select>
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">Mesajınız <span className="text-red-500">*</span></label>
-        <textarea name="mesaj" value={form.mesaj} onChange={handleChange} required rows={5} placeholder="Mesajınızı buraya yazın..."
+        <label htmlFor="contact-mesaj" className="mb-1.5 block text-sm font-medium text-gray-700">Mesajınız <span className="text-red-500">*</span></label>
+        <textarea id="contact-mesaj" name="mesaj" value={form.mesaj} onChange={handleChange} required rows={5} placeholder="Mesajınızı buraya yazın..."
           className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20" />
       </div>
       {status === "error" && (

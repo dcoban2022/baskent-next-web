@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Diskalkuli — Başkent Dil Konuşma",
   description: "Sayı ve matematik öğrenmede güçlük yaşayan bireylere yönelik uzman eğitim desteği.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/diskalkuli" },
+  openGraph: {
+    title: "Diskalkuli — Başkent Dil Konuşma",
+    description: "Sayı ve matematik öğrenmede güçlük yaşayan bireylere yönelik uzman eğitim desteği.",
+    url: "https://www.baskentdilkonusma.com/diskalkuli",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const belirtiler = [

@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "İşitme Engeli Eğitimi — Başkent Dil Konuşma",
   description: "1 yaşından itibaren işitme engeli rehabilitasyonu, dil-konuşma terapisi ve aile rehberliği.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/isitme-engeli" },
+  openGraph: {
+    title: "İşitme Engeli Eğitimi — Başkent Dil Konuşma",
+    description: "1 yaşından itibaren işitme engeli rehabilitasyonu, dil-konuşma terapisi ve aile rehberliği.",
+    url: "https://www.baskentdilkonusma.com/isitme-engeli",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const hizmetler = [

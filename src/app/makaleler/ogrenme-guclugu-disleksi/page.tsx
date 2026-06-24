@@ -4,6 +4,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Öğrenme Güçlüğü ve Disleksi — Başkent Dil Konuşma",
+  description: "Öğrenme güçlüğü ve disleksi nedir, belirtileri nelerdir? Erken tanı ve özel eğitimin önemi hakkında bilgiler.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/makaleler/ogrenme-guclugu-disleksi" },
+  openGraph: {
+    title: "Öğrenme Güçlüğü ve Disleksi — Başkent Dil Konuşma",
+    description: "Öğrenme güçlüğü ve disleksi nedir, belirtileri nelerdir? Erken tanı ve özel eğitimin önemi hakkında bilgiler.",
+    url: "https://www.baskentdilkonusma.com/makaleler/ogrenme-guclugu-disleksi",
+    type: "article",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

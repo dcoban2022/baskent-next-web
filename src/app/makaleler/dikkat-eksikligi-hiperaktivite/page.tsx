@@ -4,6 +4,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dikkat Eksikliği ve Hiperaktivite (DEHB) — Başkent Dil Konuşma",
+  description: "DEHB belirtileri, tanı süreci ve dikkat eğitimi ile destek yöntemleri hakkında kapsamlı bilgi.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/makaleler/dikkat-eksikligi-hiperaktivite" },
+  openGraph: {
+    title: "Dikkat Eksikliği ve Hiperaktivite (DEHB) — Başkent Dil Konuşma",
+    description: "DEHB belirtileri, tanı süreci ve dikkat eğitimi ile destek yöntemleri hakkında kapsamlı bilgi.",
+    url: "https://www.baskentdilkonusma.com/makaleler/dikkat-eksikligi-hiperaktivite",
+    type: "article",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

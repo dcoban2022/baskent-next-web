@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Değerlendirme — Başkent Dil Konuşma",
   description: "İlk değerlendirmede TEDİL, AAT ve Disleksi Bataryası ile kapsamlı formal/informal değerlendirme. Sonuçlara göre özel veya RAM kanallı eğitim programlanır.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/degerlendirme" },
+  openGraph: {
+    title: "Değerlendirme — Başkent Dil Konuşma",
+    description: "İlk değerlendirmede TEDİL, AAT ve Disleksi Bataryası ile kapsamlı formal/informal değerlendirme. Sonuçlara göre özel veya RAM kanallı eğitim programlanır.",
+    url: "https://www.baskentdilkonusma.com/degerlendirme",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const adimlar = [

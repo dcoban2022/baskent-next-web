@@ -4,6 +4,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "'R' Sesini Söyleyememe — Başkent Dil Konuşma",
+  description: "Çocuklarda R sesini söyleyememe nedenleri, belirtileri ve dil-konuşma terapisi ile tedavi yöntemleri.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/makaleler/r-sesi-soyleyememe" },
+  openGraph: {
+    title: "'R' Sesini Söyleyememe — Başkent Dil Konuşma",
+    description: "Çocuklarda R sesini söyleyememe nedenleri, belirtileri ve dil-konuşma terapisi ile tedavi yöntemleri.",
+    url: "https://www.baskentdilkonusma.com/makaleler/r-sesi-soyleyememe",
+    type: "article",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

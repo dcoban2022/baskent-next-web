@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Disgrafi — Başkent Dil Konuşma",
   description: "El yazısı ve ince motor becerileri etkileyen yazma güçlüğünde uzman destek.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/disgrafi" },
+  openGraph: {
+    title: "Disgrafi — Başkent Dil Konuşma",
+    description: "El yazısı ve ince motor becerileri etkileyen yazma güçlüğünde uzman destek.",
+    url: "https://www.baskentdilkonusma.com/disgrafi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const belirtiler = [

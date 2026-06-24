@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Dispraksi — Başkent Dil Konuşma",
   description: "Motor koordinasyon gelişim bozukluğunda uzman eğitim ve destek programı.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/dispraksi" },
+  openGraph: {
+    title: "Dispraksi — Başkent Dil Konuşma",
+    description: "Motor koordinasyon gelişim bozukluğunda uzman eğitim ve destek programı.",
+    url: "https://www.baskentdilkonusma.com/dispraksi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

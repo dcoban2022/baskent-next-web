@@ -101,44 +101,44 @@ export default function KariyerForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">
+          <label htmlFor="kariyer-ad" className="mb-1.5 block text-sm font-medium text-gray-700">
             Ad Soyad <span className="text-red-500">*</span>
           </label>
           <input
-            name="ad" value={form.ad} onChange={handleChange} required type="text"
+            id="kariyer-ad" name="ad" value={form.ad} onChange={handleChange} required type="text"
             placeholder="Adınız Soyadınız"
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">
+          <label htmlFor="kariyer-telefon" className="mb-1.5 block text-sm font-medium text-gray-700">
             Telefon <span className="text-red-500">*</span>
           </label>
           <input
-            name="telefon" value={form.telefon} onChange={handleChange} required type="tel"
-            placeholder="0 5XX XXX XX XX"
+            id="kariyer-telefon" name="telefon" value={form.telefon} onChange={handleChange} required type="tel"
+            placeholder="0 5XX XXX XX XX" pattern="[0-9\s\(\)\+]{10,15}"
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
           />
         </div>
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
+        <label htmlFor="kariyer-email" className="mb-1.5 block text-sm font-medium text-gray-700">
           E-posta <span className="text-red-500">*</span>
         </label>
         <input
-          name="email" value={form.email} onChange={handleChange} required type="email"
+          id="kariyer-email" name="email" value={form.email} onChange={handleChange} required type="email"
           placeholder="ornek@email.com"
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
         />
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
+        <label htmlFor="kariyer-pozisyon" className="mb-1.5 block text-sm font-medium text-gray-700">
           Başvurulan Pozisyon <span className="text-red-500">*</span>
         </label>
         <select
-          name="pozisyon" value={form.pozisyon} onChange={handleChange} required
+          id="kariyer-pozisyon" name="pozisyon" value={form.pozisyon} onChange={handleChange} required
           className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
         >
           <option value="">Pozisyon seçiniz</option>
@@ -148,9 +148,9 @@ export default function KariyerForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">Eğitim Durumu</label>
+          <label htmlFor="kariyer-egitim" className="mb-1.5 block text-sm font-medium text-gray-700">Eğitim Durumu</label>
           <select
-            name="egitim" value={form.egitim} onChange={handleChange}
+            id="kariyer-egitim" name="egitim" value={form.egitim} onChange={handleChange}
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
           >
             <option value="">Seçiniz</option>
@@ -158,9 +158,9 @@ export default function KariyerForm() {
           </select>
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-700">Deneyim</label>
+          <label htmlFor="kariyer-deneyim" className="mb-1.5 block text-sm font-medium text-gray-700">Deneyim</label>
           <select
-            name="deneyim" value={form.deneyim} onChange={handleChange}
+            id="kariyer-deneyim" name="deneyim" value={form.deneyim} onChange={handleChange}
             className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
           >
             <option value="">Seçiniz</option>
@@ -170,11 +170,11 @@ export default function KariyerForm() {
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
+        <label htmlFor="kariyer-mesaj" className="mb-1.5 block text-sm font-medium text-gray-700">
           Kendinizden Bahsedin <span className="text-red-500">*</span>
         </label>
         <textarea
-          name="mesaj" value={form.mesaj} onChange={handleChange} required rows={5}
+          id="kariyer-mesaj" name="mesaj" value={form.mesaj} onChange={handleChange} required rows={5}
           placeholder="Eğitim geçmişiniz, deneyimleriniz ve neden bizimle çalışmak istediğinizi kısaca anlatın..."
           className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition focus:border-[#0077b6] focus:ring-2 focus:ring-[#0077b6]/20"
         />

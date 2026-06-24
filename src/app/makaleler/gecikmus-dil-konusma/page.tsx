@@ -4,6 +4,15 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Gecikmiş Dil ve Konuşma İçin Aileler Neler Yapabilir? — Başkent Dil Konuşma",
+  description: "Dil ve konuşma gecikmesi yaşayan çocuklar için ailelerin evde yapabileceği destekleyici etkinlikler ve uzman önerileri.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/makaleler/gecikmus-dil-konusma" },
+  openGraph: {
+    title: "Gecikmiş Dil ve Konuşma İçin Aileler Neler Yapabilir? — Başkent Dil Konuşma",
+    description: "Dil ve konuşma gecikmesi yaşayan çocuklar için ailelerin evde yapabileceği destekleyici etkinlikler ve uzman önerileri.",
+    url: "https://www.baskentdilkonusma.com/makaleler/gecikmus-dil-konusma",
+    type: "article",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

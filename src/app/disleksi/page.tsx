@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Disleksi — Başkent Dil Konuşma",
   description: "Disleksi okuma güçlüğünde uzman eğitim ve terapi. Çoklu duyusal yöntemlerle bireysel program.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/disleksi" },
+  openGraph: {
+    title: "Disleksi — Başkent Dil Konuşma",
+    description: "Disleksi okuma güçlüğünde uzman eğitim ve terapi. Çoklu duyusal yöntemlerle bireysel program.",
+    url: "https://www.baskentdilkonusma.com/disleksi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const belirtiler = [

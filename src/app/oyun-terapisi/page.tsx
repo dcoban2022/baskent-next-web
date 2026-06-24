@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Oyun Terapisi — Başkent Dil Konuşma",
   description: "Oyun terapisi ile çocukların duygusal, sosyal ve iletişim becerilerini güçlendiriyoruz. Ankara Yenimahalle'de uzman oyun terapisi hizmeti.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/oyun-terapisi" },
+  openGraph: {
+    title: "Oyun Terapisi — Başkent Dil Konuşma",
+    description: "Oyun terapisi ile çocukların duygusal, sosyal ve iletişim becerilerini güçlendiriyoruz. Ankara Yenimahalle'de uzman oyun terapisi hizmeti.",
+    url: "https://www.baskentdilkonusma.com/oyun-terapisi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const faydalar = [

@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Bireysel ve Grup Eğitimi — Başkent Dil Konuşma",
   description: "RAM raporlu bireyler için ayda 8 ders bireysel ve grup eğitimi. BEP programı ve ücretsiz servis.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/bireysel-ve-grup-egitimi" },
+  openGraph: {
+    title: "Bireysel ve Grup Eğitimi — Başkent Dil Konuşma",
+    description: "RAM raporlu bireyler için ayda 8 ders bireysel ve grup eğitimi. BEP programı ve ücretsiz servis.",
+    url: "https://www.baskentdilkonusma.com/bireysel-ve-grup-egitimi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Dikkat Eğitimi & MOXO Dikkat Testi — Başkent Dil Konuşma",
   description: "7-14 yaş için Attentioner dikkat programı ve 6-70 yaş için MOXO bilgisayar destekli dikkat testi.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/dikkat-egitimi-moxo-dikkat-testi" },
+  openGraph: {
+    title: "Dikkat Eğitimi & MOXO Dikkat Testi — Başkent Dil Konuşma",
+    description: "7-14 yaş için Attentioner dikkat programı ve 6-70 yaş için MOXO bilgisayar destekli dikkat testi.",
+    url: "https://www.baskentdilkonusma.com/dikkat-egitimi-moxo-dikkat-testi",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function Page() {

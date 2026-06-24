@@ -6,6 +6,14 @@ import ServiceSchema from "@/components/ServiceSchema";
 export const metadata: Metadata = {
   title: "Dil ve Konuşma Bozuklukları — Başkent Dil Konuşma",
   description: "Artikülasyon bozuklukları, kekemelik, dil gelişim gecikmesi ve ses bozukluklarında uzman terapi hizmetleri. 1 yaşından itibaren erken müdahale.",
+  alternates: { canonical: "https://www.baskentdilkonusma.com/dil-ve-konusma-bozukluklari" },
+  openGraph: {
+    title: "Dil ve Konuşma Bozuklukları — Başkent Dil Konuşma",
+    description: "Artikülasyon bozuklukları, kekemelik, dil gelişim gecikmesi ve ses bozukluklarında uzman terapi hizmetleri. 1 yaşından itibaren erken müdahale.",
+    url: "https://www.baskentdilkonusma.com/dil-ve-konusma-bozukluklari",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 const hizmetler = [
