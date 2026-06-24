@@ -80,6 +80,10 @@ export default function Page() {
             <div className="w-full lg:w-1/2">
               <div className="relative overflow-hidden rounded-3xl shadow-xl">
                 <Image src="/images/slider/slider-2.webp" alt="Disgrafi Eğitimi" width={600} height={400} className="h-72 w-full object-cover" />
+                <div className="absolute bottom-4 left-4 z-10 rounded-xl bg-white/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Hedef Grup</p>
+                  <p className="text-sm font-bold text-gray-800">Okul Çağı</p>
+                </div>
               </div>
             </div>
           </div>

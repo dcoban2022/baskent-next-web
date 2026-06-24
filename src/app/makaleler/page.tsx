@@ -70,17 +70,54 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Makale Grid */}
-      <div className="container py-14">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
-          {articles.map((article) => (
+      {/* Makaleler */}
+      <div className="container py-14 space-y-8">
+
+        {/* Öne Çıkan Makale */}
+        <Link
+          href={`/makaleler/${articles[0].slug}`}
+          className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:flex-row"
+        >
+          <div className="relative h-64 w-full overflow-hidden md:h-auto md:w-5/12 lg:w-[45%]">
+            <Image
+              src={articles[0].image}
+              alt={articles[0].title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute top-4 left-4 flex gap-2">
+              <span className="rounded-full px-3 py-1 text-xs font-semibold text-white" style={{ backgroundColor: articles[0].color }}>
+                {articles[0].category}
+              </span>
+              <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-gray-700 backdrop-blur-sm">
+                Öne Çıkan
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col justify-center p-8 lg:p-10">
+            <p className="mb-2 text-xs text-gray-400">{articles[0].date}</p>
+            <h2 className="mb-4 text-2xl font-bold leading-snug text-gray-900 transition-colors group-hover:text-[#0077b6] lg:text-3xl">
+              {articles[0].title}
+            </h2>
+            <p className="text-base leading-relaxed text-gray-500">{articles[0].excerpt}</p>
+            <div className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-[#0077b6]">
+              Devamını Oku
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+          </div>
+        </Link>
+
+        {/* Diğer Makaleler */}
+        <div className="grid gap-6 sm:grid-cols-3">
+          {articles.slice(1).map((article) => (
             <Link
               key={article.slug}
               href={`/makaleler/${article.slug}`}
               className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
-              {/* Resim */}
-              <div className="relative h-56 w-full overflow-hidden">
+              <div className="relative h-48 w-full overflow-hidden">
                 <Image
                   src={article.image}
                   alt={article.title}
@@ -88,21 +125,17 @@ export default function Page() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3">
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold text-white"
-                    style={{ backgroundColor: article.color }}
-                  >
+                  <span className="rounded-full px-3 py-1 text-xs font-semibold text-white" style={{ backgroundColor: article.color }}>
                     {article.category}
                   </span>
                 </div>
               </div>
-              {/* İçerik */}
-              <div className="flex flex-1 flex-col p-6">
+              <div className="flex flex-1 flex-col p-5">
                 <p className="mb-2 text-xs text-gray-400">{article.date}</p>
-                <h2 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-[#0077b6]">
+                <h2 className="mb-2 text-base font-bold text-gray-900 transition-colors group-hover:text-[#0077b6] leading-snug">
                   {article.title}
                 </h2>
-                <p className="flex-1 text-sm leading-relaxed text-gray-500">{article.excerpt}</p>
+                <p className="flex-1 text-sm leading-relaxed text-gray-500 line-clamp-3">{article.excerpt}</p>
                 <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#0077b6]">
                   Devamını Oku
                   <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
