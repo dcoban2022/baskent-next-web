@@ -104,6 +104,7 @@ const kurumsal = [
   { title: "Makaleler", path: "/makaleler" },
   { title: "Galeri", path: "/galeri" },
   { title: "Videolar", path: "/videolar" },
+  { title: "Kariyer", path: "/kariyer" },
   { title: "KVKK", path: "/kvkk" },
   { title: "İletişim", path: "/iletisim" },
 ];
