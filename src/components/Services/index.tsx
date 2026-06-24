@@ -77,6 +77,7 @@ const services = [
     category: "Diğer",
     color: "#6b21a8",
     image: "/images/services/oyun-terapisi.jpg",
+    objectPosition: "bottom",
   },
   {
     id: 9,
@@ -152,6 +153,7 @@ const Services = () => {
                     loading="lazy"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{ objectPosition: service.objectPosition ?? "center" }}
                   />
                   {/* Kategori rozeti resim üzerinde */}
                   <div className="absolute top-3 left-3">
