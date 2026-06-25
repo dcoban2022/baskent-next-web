@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export type Session = {
   session_id: string;
@@ -129,16 +129,13 @@ function DetailRow({ label, value }: { label: string; value?: string | boolean |
 function SessionDetail({ sessionId }: { sessionId: string }) {
   const [data, setData] = useState<{ events: EventRow[] } | null>(null);
   const [loading, setLoading] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
-  useMemo(() => {
-    if (loaded) return;
+  useEffect(() => {
     setLoading(true);
     fetch(`/api/admin/sessions?id=${sessionId}`)
       .then((r) => r.json())
-      .then((d) => { setData(d); setLoaded(true); })
+      .then((d) => setData(d))
       .finally(() => setLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
   if (loading) return (

@@ -5,40 +5,43 @@ import DateRangePicker from "./DateRangePicker";
 import SessionsTab, { type Session } from "./SessionsTab";
 
 async function getStats(days: number) {
-  const interval = `${days} days`;
+  // Use JS-computed cutoff to avoid make_interval parameterization issues with Neon
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
   const [overview, topPages, devices, utmSources, countries, sessions, hourly] = await Promise.all([
     sql`
       SELECT
-        COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > NOW() - INTERVAL '1 day') AS pv_today,
-        COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > NOW() - make_interval(days => ${days})) AS pv_period,
-        COUNT(DISTINCT ip) FILTER (WHERE created_at > NOW() - make_interval(days => ${days})) AS uniq_visitors,
-        COUNT(*) FILTER (WHERE event_type = 'phone_clicked' AND created_at > NOW() - make_interval(days => ${days})) AS phone,
-        COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked' AND created_at > NOW() - make_interval(days => ${days})) AS wa,
-        COUNT(*) FILTER (WHERE event_type = 'form_submitted' AND created_at > NOW() - make_interval(days => ${days})) AS form
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > ${yesterday}::timestamptz) AS pv_today,
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > ${cutoff}::timestamptz) AS pv_period,
+        COUNT(DISTINCT ip) FILTER (WHERE created_at > ${cutoff}::timestamptz) AS uniq_visitors,
+        COUNT(*) FILTER (WHERE event_type = 'phone_clicked' AND created_at > ${cutoff}::timestamptz) AS phone,
+        COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked' AND created_at > ${cutoff}::timestamptz) AS wa,
+        COUNT(*) FILTER (WHERE event_type = 'form_submitted' AND created_at > ${cutoff}::timestamptz) AS form
       FROM events
     `,
     sql`
       SELECT page, COUNT(*) AS cnt
       FROM events
-      WHERE event_type = 'page_view' AND created_at > NOW() - make_interval(days => ${days})
+      WHERE event_type = 'page_view' AND created_at > ${cutoff}::timestamptz
       GROUP BY page ORDER BY cnt DESC LIMIT 8
     `,
     sql`
       SELECT COALESCE(device_type,'desktop') AS device, COUNT(*) AS cnt
       FROM events
-      WHERE created_at > NOW() - make_interval(days => ${days})
+      WHERE created_at > ${cutoff}::timestamptz
       GROUP BY device ORDER BY cnt DESC
     `,
     sql`
       SELECT COALESCE(utm_source,'direct') AS source, COUNT(*) AS cnt
       FROM events
-      WHERE event_type = 'page_view' AND created_at > NOW() - make_interval(days => ${days})
+      WHERE event_type = 'page_view' AND created_at > ${cutoff}::timestamptz
       GROUP BY utm_source ORDER BY cnt DESC LIMIT 6
     `,
     sql`
       SELECT COALESCE(country,'unknown') AS country, COUNT(*) AS cnt
       FROM events
-      WHERE created_at > NOW() - make_interval(days => ${days})
+      WHERE created_at > ${cutoff}::timestamptz
       GROUP BY country ORDER BY cnt DESC LIMIT 8
     `,
     sql`
@@ -61,9 +64,9 @@ async function getStats(days: number) {
         bool_or(event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS converted,
         string_agg(DISTINCT event_type, ',') AS events
       FROM events
-      WHERE session_id IS NOT NULL AND created_at > NOW() - make_interval(days => ${days})
+      WHERE session_id IS NOT NULL AND created_at > ${cutoff}::timestamptz
       GROUP BY session_id
-      ORDER BY started_at DESC
+      ORDER BY MIN(created_at) DESC
       LIMIT 300
     `,
     sql`
@@ -71,8 +74,8 @@ async function getStats(days: number) {
         date_trunc('day', created_at AT TIME ZONE 'Europe/Istanbul') AS day,
         COUNT(*) FILTER (WHERE event_type = 'page_view') AS pv
       FROM events
-      WHERE created_at > NOW() - make_interval(days => ${days})
-      GROUP BY day ORDER BY day ASC
+      WHERE created_at > ${cutoff}::timestamptz
+      GROUP BY 1 ORDER BY 1 ASC
     `,
   ]);
 

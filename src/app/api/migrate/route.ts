@@ -34,27 +34,22 @@ export async function GET() {
       )
     `;
 
-    await sql`CREATE INDEX IF NOT EXISTS idx_events_created_at  ON events (created_at DESC)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_events_event_type  ON events (event_type)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_events_country     ON events (country)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_events_utm_source  ON events (utm_source)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_events_session_id  ON events (session_id)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_created_at ON events (created_at DESC)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_event_type ON events (event_type)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_country    ON events (country)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_utm_source ON events (utm_source)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_session_id ON events (session_id)`;
 
-    // Add new columns if table already existed
-    const newCols = [
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS session_id       VARCHAR(36)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS region           VARCHAR(100)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS browser_version  VARCHAR(20)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS os_version       VARCHAR(20)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS language         VARCHAR(20)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS timezone         VARCHAR(60)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS screen           VARCHAR(20)",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS is_returning     BOOLEAN DEFAULT FALSE",
-      "ALTER TABLE events ADD COLUMN IF NOT EXISTS connection       VARCHAR(20)",
-    ];
-    for (const stmt of newCols) {
-      await sql.unsafe(stmt);
-    }
+    // Add new columns to existing table (safe to run multiple times)
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS session_id      VARCHAR(36)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS region          VARCHAR(100)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS browser_version VARCHAR(20)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS os_version      VARCHAR(20)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS language        VARCHAR(20)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS timezone        VARCHAR(60)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS screen          VARCHAR(20)`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS is_returning    BOOLEAN DEFAULT FALSE`;
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS connection      VARCHAR(20)`;
 
     return NextResponse.json({ ok: true, message: "Migration complete" });
   } catch (err) {
