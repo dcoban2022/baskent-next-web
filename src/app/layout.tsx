@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import ChatWidget from "@/components/ChatWidget";
 import CookieBanner from "@/components/CookieBanner";
+import PageTracker from "@/components/PageTracker";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
@@ -103,6 +104,7 @@ export default function RootLayout({
           <WhatsAppButton />
           <ChatWidget />
           <CookieBanner />
+          <PageTracker />
           <Analytics />
         </Providers>
       </body>
