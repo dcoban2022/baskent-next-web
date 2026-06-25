@@ -17,9 +17,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
 
     sql`
       SELECT
-        COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > ${yesterday}::timestamptz) AS pv_today,
-        COUNT(*) FILTER (WHERE event_type = 'page_view'         AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS pv_period,
-        COUNT(DISTINCT ip)                                    FILTER (WHERE created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS uniq_visitors,
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND (page IS NULL OR page NOT LIKE '/admin%') AND created_at > ${yesterday}::timestamptz) AS pv_today,
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND (page IS NULL OR page NOT LIKE '/admin%') AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS pv_period,
+        COUNT(DISTINCT ip)                               FILTER (WHERE (page IS NULL OR page NOT LIKE '/admin%') AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS uniq_visitors,
         COUNT(*) FILTER (WHERE event_type = 'phone_clicked'     AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS phone,
         COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked'  AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS wa,
         COUNT(*) FILTER (WHERE event_type = 'form_submitted'    AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz) AS form
@@ -28,8 +28,8 @@ async function getStats(from: string, to: string, prevFrom: string) {
 
     sql`
       SELECT
-        COUNT(*) FILTER (WHERE event_type = 'page_view')        AS pv_period,
-        COUNT(DISTINCT ip)                                       AS uniq_visitors,
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND (page IS NULL OR page NOT LIKE '/admin%')) AS pv_period,
+        COUNT(DISTINCT ip)                                                                               AS uniq_visitors,
         COUNT(*) FILTER (WHERE event_type = 'phone_clicked')    AS phone,
         COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked') AS wa,
         COUNT(*) FILTER (WHERE event_type = 'form_submitted')   AS form
@@ -40,7 +40,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
     sql`
       SELECT page, COUNT(*) AS cnt
       FROM events
-      WHERE event_type = 'page_view' AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      WHERE event_type = 'page_view'
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY page ORDER BY cnt DESC LIMIT 8
     `,
 
@@ -69,7 +71,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
         ) AS source,
         COUNT(*) AS cnt
       FROM events
-      WHERE event_type = 'page_view' AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      WHERE event_type = 'page_view'
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY source ORDER BY cnt DESC LIMIT 8
     `,
 
@@ -115,7 +119,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
         bool_or(event_type = 'form_submitted')   AS had_form,
         string_agg(DISTINCT event_type, ',')     AS events
       FROM events
-      WHERE session_id IS NOT NULL AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      WHERE session_id IS NOT NULL
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY session_id
       ORDER BY MIN(created_at) DESC
       LIMIT 300
@@ -124,10 +130,11 @@ async function getStats(from: string, to: string, prevFrom: string) {
     sql`
       SELECT
         date_trunc('day', created_at AT TIME ZONE 'Europe/Istanbul') AS day,
-        COUNT(*) FILTER (WHERE event_type = 'page_view') AS pv,
+        COUNT(*) FILTER (WHERE event_type = 'page_view' AND (page IS NULL OR page NOT LIKE '/admin%')) AS pv,
         COUNT(*) FILTER (WHERE event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS conversions
       FROM events
-      WHERE created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      WHERE (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY 1 ORDER BY 1 ASC
     `,
 
@@ -137,7 +144,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
         EXTRACT(HOUR FROM created_at AT TIME ZONE 'Europe/Istanbul')::int AS hour,
         COUNT(*) AS cnt
       FROM events
-      WHERE event_type = 'page_view' AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      WHERE event_type = 'page_view'
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY 1, 2 ORDER BY 1, 2
     `,
 
@@ -152,7 +161,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
           MIN(page) AS entry_page,
           bool_or(event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS converted
         FROM events
-        WHERE session_id IS NOT NULL AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
         GROUP BY session_id
       ) s
       GROUP BY entry_page
@@ -166,7 +177,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
       FROM (
         SELECT session_id, bool_or(is_returning) AS is_returning
         FROM events
-        WHERE session_id IS NOT NULL AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
         GROUP BY session_id
       ) s
       GROUP BY 1
@@ -179,7 +192,9 @@ async function getStats(from: string, to: string, prevFrom: string) {
       FROM (
         SELECT session_id, COUNT(*) FILTER (WHERE event_type = 'page_view') AS page_count
         FROM events
-        WHERE session_id IS NOT NULL AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
         GROUP BY session_id
       ) s
     `,
