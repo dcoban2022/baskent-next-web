@@ -33,10 +33,25 @@ async function getStats(days: number) {
       GROUP BY device ORDER BY cnt DESC
     `,
     sql`
-      SELECT COALESCE(utm_source,'direct') AS source, COUNT(*) AS cnt
+      SELECT
+        COALESCE(
+          NULLIF(utm_source, ''),
+          CASE
+            WHEN referrer ILIKE '%google.%'                               THEN 'google'
+            WHEN referrer ILIKE '%instagram.%'                            THEN 'instagram'
+            WHEN referrer ILIKE '%facebook.%' OR referrer ILIKE '%fb.com%' THEN 'facebook'
+            WHEN referrer ILIKE '%twitter.%'  OR referrer ILIKE '%t.co%' OR referrer ILIKE '%x.com%' THEN 'twitter'
+            WHEN referrer ILIKE '%youtube.%'  OR referrer ILIKE '%youtu.be%' THEN 'youtube'
+            WHEN referrer ILIKE '%linkedin.%'                             THEN 'linkedin'
+            WHEN referrer ILIKE '%tiktok.%'                               THEN 'tiktok'
+            WHEN referrer IS NULL OR referrer = ''                        THEN 'direct'
+            ELSE 'referral'
+          END
+        ) AS source,
+        COUNT(*) AS cnt
       FROM events
       WHERE event_type = 'page_view' AND created_at > ${cutoff}::timestamptz
-      GROUP BY utm_source ORDER BY cnt DESC LIMIT 6
+      GROUP BY source ORDER BY cnt DESC LIMIT 8
     `,
     sql`
       SELECT COALESCE(country,'unknown') AS country, COUNT(*) AS cnt
@@ -59,8 +74,22 @@ async function getStats(days: number) {
         MAX(city) AS city,
         MAX(device_type) AS device_type,
         MAX(browser) AS browser,
-        COALESCE(MAX(utm_source),'direct') AS utm_source,
+        MAX(utm_source) AS utm_source,
         MAX(referrer) AS referrer,
+        COALESCE(
+          NULLIF(MAX(utm_source), ''),
+          CASE
+            WHEN MAX(referrer) ILIKE '%google.%'                                    THEN 'google'
+            WHEN MAX(referrer) ILIKE '%instagram.%'                                 THEN 'instagram'
+            WHEN MAX(referrer) ILIKE '%facebook.%' OR MAX(referrer) ILIKE '%fb.com%' THEN 'facebook'
+            WHEN MAX(referrer) ILIKE '%twitter.%'  OR MAX(referrer) ILIKE '%t.co%' OR MAX(referrer) ILIKE '%x.com%' THEN 'twitter'
+            WHEN MAX(referrer) ILIKE '%youtube.%'  OR MAX(referrer) ILIKE '%youtu.be%' THEN 'youtube'
+            WHEN MAX(referrer) ILIKE '%linkedin.%'                                  THEN 'linkedin'
+            WHEN MAX(referrer) ILIKE '%tiktok.%'                                    THEN 'tiktok'
+            WHEN MAX(referrer) IS NULL OR MAX(referrer) = ''                        THEN 'direct'
+            ELSE 'referral'
+          END
+        ) AS effective_source,
         bool_or(event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS converted,
         string_agg(DISTINCT event_type, ',') AS events
       FROM events

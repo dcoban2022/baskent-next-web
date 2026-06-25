@@ -14,6 +14,7 @@ export type Session = {
   device_type: string;
   browser: string;
   utm_source: string;
+  effective_source: string;
   referrer: string;
   converted: boolean;
   events: string;
@@ -239,12 +240,12 @@ export default function SessionsTab({ sessions }: { sessions: Session[] }) {
   const [countryFilter, setCountryFilter] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  const sources = useMemo(() => [...new Set(sessions.map((s) => s.utm_source || "direct"))].sort(), [sessions]);
+  const sources = useMemo(() => [...new Set(sessions.map((s) => s.effective_source || s.utm_source || "direct"))].sort(), [sessions]);
   const devices = useMemo(() => [...new Set(sessions.map((s) => s.device_type || "desktop"))].sort(), [sessions]);
   const countries = useMemo(() => [...new Set(sessions.map((s) => s.country || "unknown"))].sort(), [sessions]);
 
   const filtered = useMemo(() => sessions.filter((s) => {
-    if (sourceFilter && (s.utm_source || "direct") !== sourceFilter) return false;
+    if (sourceFilter && (s.effective_source || s.utm_source || "direct") !== sourceFilter) return false;
     if (deviceFilter && (s.device_type || "desktop") !== deviceFilter) return false;
     if (countryFilter && (s.country || "unknown") !== countryFilter) return false;
     if (statusFilter === "converted" && !s.converted) return false;
@@ -320,8 +321,8 @@ export default function SessionsTab({ sessions }: { sessions: Session[] }) {
                   >
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-500">{fmtDate(s.started_at)}</td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${SOURCE_COLORS[s.utm_source?.toLowerCase()] ?? "bg-gray-100 text-gray-600 border-gray-200"}`}>
-                        {s.utm_source || "direct"}
+                      <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${SOURCE_COLORS[(s.effective_source || s.utm_source)?.toLowerCase()] ?? "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                        {s.effective_source || s.utm_source || "direct"}
                       </span>
                     </td>
                     <td className="px-4 py-3">
