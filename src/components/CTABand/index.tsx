@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/tracker";
 
 export default function CTABand() {
   return (

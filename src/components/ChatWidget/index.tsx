@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/tracker";
 
 interface Message {
   role: "user" | "assistant";

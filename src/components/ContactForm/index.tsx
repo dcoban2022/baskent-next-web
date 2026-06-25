@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/tracker";
 
 export default function ContactForm() {
   const [form, setForm] = useState({ ad: "", telefon: "", email: "", konu: "", mesaj: "" });
