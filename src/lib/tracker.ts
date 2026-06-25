@@ -13,6 +13,23 @@ function getSessionId(): string {
   }
 }
 
+function getVisitorSignals(): Record<string, string | boolean> {
+  try {
+    const isReturning = !!localStorage.getItem("_visited");
+    if (!isReturning) localStorage.setItem("_visited", "1");
+    return {
+      language: navigator.language || "",
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+      screen: `${screen.width}x${screen.height}`,
+      is_returning: isReturning,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      connection: (navigator as any).connection?.effectiveType || "",
+    };
+  } catch {
+    return {};
+  }
+}
+
 function getUtmParams(): Record<string, string> {
   if (typeof window === "undefined") return {};
   const params = new URLSearchParams(window.location.search);
@@ -35,6 +52,7 @@ function getUtmParams(): Record<string, string> {
 export async function track(event_type: string, extra?: Record<string, unknown>) {
   try {
     const utms = getUtmParams();
+    const signals = getVisitorSignals();
     await fetch("/api/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,6 +62,7 @@ export async function track(event_type: string, extra?: Record<string, unknown>)
         page: window.location.pathname,
         referrer: document.referrer || null,
         ...utms,
+        ...signals,
         extra: extra || {},
       }),
     });
