@@ -14,7 +14,7 @@ type Overview = {
   form: number;
 };
 
-type SparkPoint = { day: string; pv: number };
+type TrendPoint = { day: string; pv: number; conversions: number };
 
 function calcDelta(cur: number, prev: number): number | null {
   if (!prev) return null;
@@ -30,15 +30,19 @@ function StatCard({
   active,
   onClick,
   delta,
+  suffix,
+  invertDelta,
 }: {
   label: string;
   value: number;
   icon: React.ReactNode;
-  color?: "blue" | "green" | "orange" | "pink" | "purple" | "teal";
+  color?: "blue" | "green" | "orange" | "pink" | "purple" | "teal" | "red";
   filterKey?: ConversionFilter;
   active?: boolean;
   onClick?: () => void;
   delta?: number | null;
+  suffix?: string;
+  invertDelta?: boolean;
 }) {
   const bg: Record<string, string> = {
     blue:   "bg-blue-50 text-blue-600",
@@ -47,12 +51,20 @@ function StatCard({
     pink:   "bg-pink-50 text-pink-600",
     purple: "bg-purple-50 text-purple-600",
     teal:   "bg-teal-50 text-teal-600",
+    red:    "bg-red-50 text-red-600",
   };
   const ring: Record<string, string> = {
     orange: "ring-orange-400",
     green:  "ring-green-400",
     pink:   "ring-pink-400",
+    red:    "ring-red-400",
   };
+
+  const isGood = delta == null
+    ? true
+    : invertDelta
+    ? delta <= 0
+    : delta >= 0;
 
   return (
     <button
@@ -68,13 +80,17 @@ function StatCard({
         <p className="text-sm text-gray-500">{label}</p>
         <span className={`rounded-lg p-2 ${bg[color]}`}>{icon}</span>
       </div>
-      <p className="mt-3 text-3xl font-bold text-gray-900">{Number(value).toLocaleString("tr-TR")}</p>
+      <p className="mt-3 text-3xl font-bold text-gray-900">
+        {Number(value).toLocaleString("tr-TR")}{suffix}
+      </p>
       <div className="mt-1 flex min-h-[1rem] items-center justify-between gap-1">
-        {delta !== null && delta !== undefined ? (
-          <span className={`text-xs font-semibold ${delta >= 0 ? "text-green-600" : "text-red-500"}`}>
+        {delta != null ? (
+          <span className={`text-xs font-semibold ${isGood ? "text-green-600" : "text-red-500"}`}>
             {delta >= 0 ? "↑" : "↓"}{Math.abs(delta)}% önceki dönem
           </span>
-        ) : <span />}
+        ) : (
+          <span />
+        )}
         {filterKey && (
           <span className={`text-xs ${active ? "font-semibold text-[#0077b6]" : "text-gray-400"}`}>
             {active ? "✓ Filtre aktif" : "Filtrele →"}
@@ -85,28 +101,132 @@ function StatCard({
   );
 }
 
-function Sparkline({ data }: { data: SparkPoint[] }) {
+function DualTrend({ data, label }: { data: TrendPoint[]; label: string }) {
   if (!data.length) return null;
-  const max = Math.max(...data.map((d) => Number(d.pv)), 1);
+  const maxPv   = Math.max(...data.map((d) => Number(d.pv)), 1);
+  const maxConv = Math.max(...data.map((d) => Number(d.conversions)), 1);
+
   return (
-    <div className="flex h-12 items-end gap-0.5">
-      {data.map((d) => (
-        <div
-          key={d.day}
-          title={`${new Date(d.day).toLocaleDateString("tr-TR", { month: "short", day: "numeric" })}: ${d.pv}`}
-          className="flex-1 cursor-default rounded-t bg-blue-200 transition-colors hover:bg-blue-400"
-          style={{ height: `${(Number(d.pv) / max) * 100}%`, minHeight: 2 }}
-        />
-      ))}
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="font-semibold text-gray-900">Görüntüleme & Dönüşüm Trendi</h2>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 text-xs text-gray-500">
+            <span className="h-2.5 w-2.5 rounded-sm bg-blue-200" />Görüntüleme
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-gray-500">
+            <span className="h-2.5 w-2.5 rounded-sm bg-green-300" />Dönüşüm
+          </div>
+          <span className="text-xs text-gray-400">{label}</span>
+        </div>
+      </div>
+      <div className="flex h-20 items-end gap-px">
+        {data.map((d) => (
+          <div key={d.day} className="flex flex-1 items-end gap-px">
+            <div
+              title={`${new Date(d.day).toLocaleDateString("tr-TR", { month: "short", day: "numeric" })}: ${d.pv} görüntüleme`}
+              className="flex-1 cursor-default rounded-t bg-blue-200 transition-colors hover:bg-blue-400"
+              style={{ height: `${(Number(d.pv) / maxPv) * 100}%`, minHeight: 2 }}
+            />
+            <div
+              title={`${new Date(d.day).toLocaleDateString("tr-TR", { month: "short", day: "numeric" })}: ${d.conversions} dönüşüm`}
+              className="flex-1 cursor-default rounded-t bg-green-300 transition-colors hover:bg-green-500"
+              style={{ height: `${(Number(d.conversions) / maxConv) * 100}%`, minHeight: Number(d.conversions) > 0 ? 2 : 0 }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ConversionGoal({ totalConversions }: { totalConversions: number }) {
+  const [goal, setGoal]     = useState<number>(0);
+  const [editing, setEditing] = useState(false);
+  const [input, setInput]   = useState("");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("conv_monthly_goal");
+    if (stored) setGoal(Number(stored));
+  }, []);
+
+  function saveGoal() {
+    const n = parseInt(input, 10);
+    if (!n || n <= 0) return;
+    localStorage.setItem("conv_monthly_goal", String(n));
+    setGoal(n);
+    setEditing(false);
+  }
+
+  const pct      = goal > 0 ? Math.min(Math.round((totalConversions / goal) * 100), 100) : 0;
+  const barColor = pct >= 100 ? "bg-green-500" : pct >= 75 ? "bg-[#0077b6]" : pct >= 50 ? "bg-yellow-400" : "bg-red-400";
+
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="font-semibold text-gray-900">Dönüşüm Hedefi</h2>
+        <button
+          onClick={() => { setEditing(true); setInput(String(goal || "")); }}
+          className="text-xs text-[#0077b6] hover:underline"
+        >
+          {goal ? "Değiştir" : "Hedef belirle"}
+        </button>
+      </div>
+      {editing ? (
+        <div className="flex gap-2">
+          <input
+            type="number"
+            min={1}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Aylık hedef (örn: 50)"
+            className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-[#0077b6]"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter") saveGoal();
+              if (e.key === "Escape") setEditing(false);
+            }}
+          />
+          <button
+            onClick={saveGoal}
+            className="rounded-lg bg-[#0077b6] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#005f8e]"
+          >
+            Kaydet
+          </button>
+          <button
+            onClick={() => setEditing(false)}
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+          >
+            İptal
+          </button>
+        </div>
+      ) : goal > 0 ? (
+        <>
+          <div className="mb-2 flex items-baseline justify-between">
+            <span className="text-2xl font-bold text-gray-900">{totalConversions}</span>
+            <span className="text-sm text-gray-400">/ {goal} hedef</span>
+          </div>
+          <div className="h-3 w-full overflow-hidden rounded-full bg-gray-100">
+            <div className={`h-3 rounded-full transition-all ${barColor}`} style={{ width: `${pct}%` }} />
+          </div>
+          <p className="mt-2 text-xs text-gray-500">
+            {pct >= 100
+              ? "Hedef aşıldı!"
+              : `%${pct} tamamlandı · ${Math.max(0, goal - totalConversions)} dönüşüm kaldı`}
+          </p>
+        </>
+      ) : (
+        <p className="py-2 text-sm text-gray-400">Aylık dönüşüm hedefi belirlenmedi.</p>
+      )}
     </div>
   );
 }
 
 function Funnel({ sessions }: { sessions: Session[] }) {
   const steps = [
-    { label: "Tüm Ziyaretler", value: sessions.length, color: "bg-[#0077b6]" },
-    { label: "2+ Sayfa Gezdi", value: sessions.filter((s) => Number(s.page_count) >= 2).length, color: "bg-blue-500" },
-    { label: "Dönüşüm Yaptı", value: sessions.filter((s) => s.converted).length, color: "bg-green-500" },
+    { label: "Tüm Ziyaretler",  value: sessions.length,                                                   color: "bg-[#0077b6]" },
+    { label: "2+ Sayfa Gezdi",  value: sessions.filter((s) => Number(s.page_count) >= 2).length,           color: "bg-blue-500" },
+    { label: "Dönüşüm Yaptı",  value: sessions.filter((s) => s.converted).length,                        color: "bg-green-500" },
   ];
   const max = steps[0].value || 1;
   return (
@@ -179,7 +299,9 @@ function SourceConvTable({ sessions }: { sessions: Session[] }) {
             </tr>
           ))}
           {rows.length === 0 && (
-            <tr><td colSpan={4} className="py-6 text-center text-xs text-gray-400">Veri yok</td></tr>
+            <tr>
+              <td colSpan={4} className="py-6 text-center text-xs text-gray-400">Veri yok</td>
+            </tr>
           )}
         </tbody>
       </table>
@@ -190,20 +312,26 @@ function SourceConvTable({ sessions }: { sessions: Session[] }) {
 export default function DashboardClient({
   overview,
   prevOverview,
+  bounceStats,
   sessions,
-  sparkline,
+  dailyTrend,
+  dateLabel,
   days,
 }: {
   overview: Overview;
   prevOverview: Overview;
+  bounceStats: { bounced: number; total: number };
   sessions: Session[];
-  sparkline: SparkPoint[];
+  dailyTrend: TrendPoint[];
+  dateLabel: string;
   days: number;
 }) {
   const router = useRouter();
   const [conversionFilter, setConversionFilter] = useState<ConversionFilter>(null);
-  const [autoRefresh, setAutoRefresh] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+  const [autoRefresh, setAutoRefresh]           = useState(false);
+  const [lastRefresh, setLastRefresh]           = useState<Date | null>(null);
+  const [sendingReport, setSendingReport]       = useState(false);
+  const [reportMsg, setReportMsg]               = useState<string | null>(null);
 
   useEffect(() => {
     if (!autoRefresh) return;
@@ -218,16 +346,47 @@ export default function DashboardClient({
     setConversionFilter((prev) => (prev === key ? null : key));
   }
 
+  async function sendReport() {
+    setSendingReport(true);
+    setReportMsg(null);
+    try {
+      const res = await fetch("/api/admin/send-report", { method: "POST" });
+      const json = await res.json() as { ok?: boolean; error?: string };
+      setReportMsg(json.ok ? "Rapor gönderildi!" : (json.error ?? "Hata oluştu"));
+    } catch {
+      setReportMsg("Bağlantı hatası");
+    } finally {
+      setSendingReport(false);
+      setTimeout(() => setReportMsg(null), 4000);
+    }
+  }
+
+  const bounceRate = bounceStats.total > 0
+    ? Math.round((bounceStats.bounced / bounceStats.total) * 100)
+    : 0;
+
+  const totalConversions = Number(overview.phone) + Number(overview.wa) + Number(overview.form);
+
   return (
     <>
       {/* Auto-refresh bar */}
-      <div className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-2.5 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white px-4 py-2.5 shadow-sm">
         <span className="text-xs text-gray-400">
           {lastRefresh
             ? `Son güncelleme: ${lastRefresh.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
             : "Canlı veri"}
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {reportMsg && (
+            <span className="text-xs font-medium text-green-600">{reportMsg}</span>
+          )}
+          <button
+            onClick={sendReport}
+            disabled={sendingReport}
+            className="rounded-lg border border-gray-200 px-2.5 py-1 text-xs text-gray-600 transition hover:border-gray-300 hover:bg-gray-50 disabled:opacity-50"
+          >
+            {sendingReport ? "Gönderiliyor…" : "✉ Rapor Gönder"}
+          </button>
           <span className="text-xs text-gray-500">Otomatik yenileme (5 dk)</span>
           <button
             onClick={() => { setAutoRefresh((v) => !v); if (!autoRefresh) setLastRefresh(new Date()); }}
@@ -247,9 +406,9 @@ export default function DashboardClient({
       {/* KPI Cards */}
       <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">
-          Genel Bakış — Son {days} Gün
+          Genel Bakış — {dateLabel}
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
           <StatCard
             label="Sayfa Görüntüleme (Bugün)"
             value={Number(overview.pv_today)}
@@ -257,7 +416,7 @@ export default function DashboardClient({
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>}
           />
           <StatCard
-            label={`Sayfa Görüntüleme (${days} Gün)`}
+            label={`Sayfa Görüntüleme (${dateLabel})`}
             value={Number(overview.pv_period)}
             color="purple"
             delta={calcDelta(Number(overview.pv_period), Number(prevOverview.pv_period))}
@@ -269,6 +428,14 @@ export default function DashboardClient({
             color="teal"
             delta={calcDelta(Number(overview.uniq_visitors), Number(prevOverview.uniq_visitors))}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
+          />
+          <StatCard
+            label="Hemen Çıkma Oranı"
+            value={bounceRate}
+            suffix="%"
+            color="red"
+            invertDelta
+            icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>}
           />
           <StatCard
             label="Telefon Tıklaması"
@@ -303,16 +470,13 @@ export default function DashboardClient({
         </div>
       </section>
 
-      {/* Sparkline */}
-      {sparkline.length > 1 && (
-        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-semibold text-gray-900">Sayfa Görüntüleme Trendi</h2>
-            <span className="text-xs text-gray-400">{days} günlük</span>
-          </div>
-          <Sparkline data={sparkline} />
+      {/* Dual trend + Conversion goal */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <DualTrend data={dailyTrend} label={dateLabel} />
         </div>
-      )}
+        <ConversionGoal totalConversions={totalConversions} />
+      </div>
 
       {/* Funnel + Source×Conv */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -325,7 +489,7 @@ export default function DashboardClient({
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h2 className="font-semibold text-gray-900">Oturumlar</h2>
-            <p className="mt-0.5 text-xs text-gray-400">Son {days} gün · kaynak, cihaz ve ülkeye göre filtrele</p>
+            <p className="mt-0.5 text-xs text-gray-400">{dateLabel} · kaynak, cihaz ve ülkeye göre filtrele</p>
           </div>
           <div className="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-1.5">
             <svg className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
