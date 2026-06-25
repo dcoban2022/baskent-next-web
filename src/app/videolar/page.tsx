@@ -85,6 +85,30 @@ const videolar = [
     title: "Dil Konuşma Terapisti Ne Yapar?",
     description: "Uzman dil ve konuşma terapistinin görevleri, çalışma alanları ve sunduğu hizmetler.",
   },
+  {
+    src: "/videos/video-egitim-1.mp4",
+    poster: "/videos/video-egitim-1-poster.jpg",
+    title: "Eğitim Videosu 1",
+    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+  },
+  {
+    src: "/videos/video-egitim-2.mp4",
+    poster: "/videos/video-egitim-2-poster.jpg",
+    title: "Eğitim Videosu 2",
+    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+  },
+  {
+    src: "/videos/video-egitim-3.mp4",
+    poster: "/videos/video-egitim-3-poster.jpg",
+    title: "Eğitim Videosu 3",
+    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+  },
+  {
+    src: "/videos/video-egitim-4.mp4",
+    poster: "/videos/video-egitim-4-poster.jpg",
+    title: "Eğitim Videosu 4",
+    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+  },
 ];
 
 export default function Page() {
