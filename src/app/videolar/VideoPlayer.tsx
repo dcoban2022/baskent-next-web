@@ -25,7 +25,7 @@ export default function VideoPlayer({ src, poster, title, description }: VideoPl
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-      <div className="relative aspect-video bg-gray-900">
+      <div className="relative aspect-[9/16] bg-gray-900">
         {!playing ? (
           <button
             onClick={handleClickPoster}
