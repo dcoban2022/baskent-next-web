@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
-      event_type, page, referrer, extra,
+      event_type, session_id, page, referrer, extra,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term,
     } = body;
 
@@ -45,12 +45,12 @@ export async function POST(req: NextRequest) {
 
     await sql`
       INSERT INTO events (
-        event_type, page, ip, country, city,
+        event_type, session_id, page, ip, country, city,
         device_type, browser, os,
         utm_source, utm_medium, utm_campaign, utm_content, utm_term,
         referrer, extra
       ) VALUES (
-        ${event_type}, ${page ?? null}, ${ip}, ${country}, ${city},
+        ${event_type}, ${session_id ?? null}, ${page ?? null}, ${ip}, ${country}, ${city},
         ${device_type}, ${browser}, ${os},
         ${utm_source ?? null}, ${utm_medium ?? null}, ${utm_campaign ?? null},
         ${utm_content ?? null}, ${utm_term ?? null},

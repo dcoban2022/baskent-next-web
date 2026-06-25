@@ -1,9 +1,9 @@
 import { sql } from "@/lib/db";
-import { Suspense } from "react";
 import LogoutButton from "./LogoutButton";
+import SessionsTab from "./SessionsTab";
 
 async function getStats() {
-  const [overview, topPages, devices, utmSources, countries, recent] = await Promise.all([
+  const [overview, topPages, devices, utmSources, countries, sessions] = await Promise.all([
     sql`
       SELECT
         COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > NOW() - INTERVAL '1 day') AS pv_today,
@@ -46,48 +46,63 @@ async function getStats() {
       LIMIT 10
     `,
     sql`
-      SELECT event_type, page, country, device_type, browser, utm_source, created_at
+      SELECT
+        session_id,
+        MIN(created_at) AS started_at,
+        MAX(created_at) AS last_at,
+        EXTRACT(EPOCH FROM (MAX(created_at) - MIN(created_at)))::int AS duration_sec,
+        COUNT(*) AS event_count,
+        COUNT(*) FILTER (WHERE event_type = 'page_view') AS page_count,
+        MIN(page) AS entry_page,
+        MAX(page) AS exit_page,
+        MAX(ip) AS ip,
+        MAX(country) AS country,
+        MAX(city) AS city,
+        MAX(device_type) AS device_type,
+        MAX(browser) AS browser,
+        COALESCE(MAX(utm_source), 'direct') AS utm_source,
+        MAX(referrer) AS referrer,
+        bool_or(event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS converted,
+        string_agg(DISTINCT event_type, ',') AS events
       FROM events
-      ORDER BY created_at DESC
-      LIMIT 50
+      WHERE session_id IS NOT NULL AND created_at > NOW() - INTERVAL '30 days'
+      GROUP BY session_id
+      ORDER BY started_at DESC
+      LIMIT 200
     `,
   ]);
 
-  return { overview: overview[0], topPages, devices, utmSources, countries, recent };
+  return { overview: overview[0], topPages, devices, utmSources, countries, sessions };
 }
 
-function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
+function StatCard({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="mt-1 text-3xl font-bold text-gray-900">{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-gray-400">{sub}</p>}
     </div>
   );
 }
 
-function Badge({ value }: { value: string }) {
+function Badge({ value, color }: { value: string; color?: string }) {
   const colors: Record<string, string> = {
     mobile: "bg-blue-100 text-blue-700",
     desktop: "bg-purple-100 text-purple-700",
     tablet: "bg-green-100 text-green-700",
     unknown: "bg-gray-100 text-gray-500",
-    page_view: "bg-gray-100 text-gray-600",
-    phone_clicked: "bg-orange-100 text-orange-700",
-    whatsapp_clicked: "bg-green-100 text-green-700",
-    form_submitted: "bg-blue-100 text-blue-700",
-    symptom_checker: "bg-pink-100 text-pink-700",
+    direct: "bg-gray-100 text-gray-600",
+    instagram: "bg-pink-100 text-pink-700",
+    google: "bg-yellow-100 text-yellow-700",
+    facebook: "bg-blue-100 text-blue-700",
   };
+  const cls = color || colors[value?.toLowerCase()] || "bg-gray-100 text-gray-600";
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${colors[value] ?? "bg-gray-100 text-gray-600"}`}>
-      {value}
-    </span>
+    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${cls}`}>{value}</span>
   );
 }
 
 export default async function AnalyticsDashboard() {
-  const { overview, topPages, devices, utmSources, countries, recent } = await getStats();
-
+  const { overview, topPages, devices, utmSources, countries, sessions } = await getStats();
   const totalDevices = devices.reduce((s: number, d: { cnt: number }) => s + Number(d.cnt), 0) || 1;
 
   return (
@@ -105,21 +120,30 @@ export default async function AnalyticsDashboard() {
       <main className="mx-auto max-w-7xl space-y-8 p-6">
         {/* Overview */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">Genel Bakış</h2>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">Genel Bakış — Son 30 Gün</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <StatCard label="Sayfa Görüntüleme (Bugün)" value={Number(overview.pv_today)} />
             <StatCard label="Sayfa Görüntüleme (7 Gün)" value={Number(overview.pv_week)} />
             <StatCard label="Sayfa Görüntüleme (30 Gün)" value={Number(overview.pv_month)} />
-            <StatCard label="Telefon Tıklaması (30 Gün)" value={Number(overview.phone_month)} />
-            <StatCard label="WhatsApp Tıklaması (30 Gün)" value={Number(overview.wa_month)} />
-            <StatCard label="Form Gönderimi (30 Gün)" value={Number(overview.form_month)} />
+            <StatCard label="Telefon Tıklaması" value={Number(overview.phone_month)} />
+            <StatCard label="WhatsApp Tıklaması" value={Number(overview.wa_month)} />
+            <StatCard label="Form Gönderimi" value={Number(overview.form_month)} />
           </div>
+        </section>
+
+        {/* Sessions */}
+        <section className="rounded-xl border border-gray-100 bg-white shadow-sm">
+          <div className="border-b border-gray-100 px-6 py-4">
+            <h2 className="font-semibold text-gray-900">Oturumlar — Son 30 Gün</h2>
+            <p className="mt-0.5 text-sm text-gray-500">{sessions.length} oturum · kaynak, cihaz, ülkeye göre filtrele</p>
+          </div>
+          <SessionsTab sessions={sessions as Parameters<typeof SessionsTab>[0]["sessions"]} />
         </section>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Top Pages */}
           <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-semibold text-gray-900">En Çok Ziyaret Edilen Sayfalar (30 Gün)</h2>
+            <h2 className="mb-4 font-semibold text-gray-900">En Çok Ziyaret Edilen Sayfalar</h2>
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 text-left text-gray-400">
@@ -140,7 +164,7 @@ export default async function AnalyticsDashboard() {
 
           {/* UTM Sources */}
           <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-semibold text-gray-900">Trafik Kaynakları (30 Gün)</h2>
+            <h2 className="mb-4 font-semibold text-gray-900">Trafik Kaynakları</h2>
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 text-left text-gray-400">
@@ -151,7 +175,7 @@ export default async function AnalyticsDashboard() {
               <tbody>
                 {utmSources.map((row: { source: string; cnt: number }) => (
                   <tr key={row.source} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-2 text-gray-700">{row.source}</td>
+                    <td className="py-2"><Badge value={row.source} /></td>
                     <td className="py-2 text-right font-semibold text-gray-900">{Number(row.cnt)}</td>
                   </tr>
                 ))}
@@ -161,7 +185,7 @@ export default async function AnalyticsDashboard() {
 
           {/* Devices */}
           <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-semibold text-gray-900">Cihaz Dağılımı (30 Gün)</h2>
+            <h2 className="mb-4 font-semibold text-gray-900">Cihaz Dağılımı</h2>
             <div className="space-y-3">
               {devices.map((row: { device: string; cnt: number }) => {
                 const pct = Math.round((Number(row.cnt) / totalDevices) * 100);
@@ -182,7 +206,7 @@ export default async function AnalyticsDashboard() {
 
           {/* Countries */}
           <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-semibold text-gray-900">Ülkeler (30 Gün)</h2>
+            <h2 className="mb-4 font-semibold text-gray-900">Ülkeler</h2>
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 text-left text-gray-400">
@@ -201,47 +225,6 @@ export default async function AnalyticsDashboard() {
             </table>
           </section>
         </div>
-
-        {/* Recent Events */}
-        <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 font-semibold text-gray-900">Son Etkinlikler</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 text-left text-gray-400">
-                  <th className="pb-2 pr-4 font-medium">Zaman</th>
-                  <th className="pb-2 pr-4 font-medium">Etkinlik</th>
-                  <th className="pb-2 pr-4 font-medium">Sayfa</th>
-                  <th className="pb-2 pr-4 font-medium">Ülke</th>
-                  <th className="pb-2 pr-4 font-medium">Cihaz</th>
-                  <th className="pb-2 font-medium">Kaynak</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((row: {
-                  event_type: string;
-                  page: string;
-                  country: string;
-                  device_type: string;
-                  browser: string;
-                  utm_source: string;
-                  created_at: string;
-                }, i: number) => (
-                  <tr key={i} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-1.5 pr-4 font-mono text-xs text-gray-400">
-                      {new Date(row.created_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-                    </td>
-                    <td className="py-1.5 pr-4"><Badge value={row.event_type} /></td>
-                    <td className="py-1.5 pr-4 font-mono text-xs text-gray-600">{row.page || "/"}</td>
-                    <td className="py-1.5 pr-4 text-gray-600">{row.country || "—"}</td>
-                    <td className="py-1.5 pr-4"><Badge value={row.device_type || "unknown"} /></td>
-                    <td className="py-1.5 text-gray-600">{row.utm_source || "direct"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
       </main>
     </div>
   );

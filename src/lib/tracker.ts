@@ -1,5 +1,18 @@
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
 
+function getSessionId(): string {
+  try {
+    let sid = sessionStorage.getItem("_sid");
+    if (!sid) {
+      sid = crypto.randomUUID();
+      sessionStorage.setItem("_sid", sid);
+    }
+    return sid;
+  } catch {
+    return "unknown";
+  }
+}
+
 function getUtmParams(): Record<string, string> {
   if (typeof window === "undefined") return {};
   const params = new URLSearchParams(window.location.search);
@@ -27,6 +40,7 @@ export async function track(event_type: string, extra?: Record<string, unknown>)
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         event_type,
+        session_id: getSessionId(),
         page: window.location.pathname,
         referrer: document.referrer || null,
         ...utms,

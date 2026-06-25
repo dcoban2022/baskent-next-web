@@ -9,6 +9,7 @@ export async function GET() {
         id          BIGSERIAL PRIMARY KEY,
         created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
         event_type  VARCHAR(50)  NOT NULL,
+        session_id  VARCHAR(36),
         page        VARCHAR(500),
         ip          VARCHAR(45),
         country     VARCHAR(2),
@@ -29,6 +30,9 @@ export async function GET() {
     await sql`CREATE INDEX IF NOT EXISTS idx_events_event_type  ON events (event_type)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_events_country     ON events (country)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_events_utm_source  ON events (utm_source)`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_events_session_id  ON events (session_id)`;
+    // Add session_id column if table already existed without it
+    await sql`ALTER TABLE events ADD COLUMN IF NOT EXISTS session_id VARCHAR(36)`;
 
     return NextResponse.json({ ok: true, message: "Migration complete" });
   } catch (err) {
