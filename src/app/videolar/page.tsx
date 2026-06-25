@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import VideoPlayer from "./VideoPlayer";
 
 export const metadata: Metadata = {
   title: "Videolar — Başkent Dil Konuşma",
@@ -47,8 +48,6 @@ const bilgiler = [
   },
 ];
 
-const videoSayisi = 4;
-
 export default function Page() {
   return (
     <main className="pt-[116px]">
@@ -61,45 +60,19 @@ export default function Page() {
             name: "Başkent Dil Konuşma Eğitici Videoları",
             description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
             url: "https://www.baskentdilkonusma.com/videolar",
-            numberOfItems: 3,
+            numberOfItems: 1,
             itemListElement: [
               {
                 "@type": "ListItem",
                 position: 1,
                 item: {
                   "@type": "VideoObject",
-                  name: "Disleksi Nedir?",
-                  description: "Disleksi, beyinde biyolojik temelli okumayı etkileyen bir çeşit özgül öğrenme bozukluğudur. Kelimeyi doğru/akıcı tanımada zorluklar ve heceleme güçlükleri ile karakterizedir.",
-                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/services/disleksi.webp",
+                  name: "Dil ve Konuşma Bozuklukları",
+                  description: "Dil gelişim gecikmesi, artikülasyon bozukluğu ve kekemelik hakkında uzman bilgilendirme videosu.",
+                  thumbnailUrl: "https://www.baskentdilkonusma.com/videos/video-dil-konusma-poster.jpg",
                   uploadDate: "2024-03-11",
-                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
-                  url: "https://www.instagram.com/baskentdilkonusma/",
-                },
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                item: {
-                  "@type": "VideoObject",
-                  name: "Matematik Güçlüğü (Diskalkuli) Nedir?",
-                  description: "Diskalkuli, kişinin sayıları anlama ve matematik öğrenme yeteneğini etkileyen bir öğrenme güçlüğüdür.",
-                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/services/bireysel.webp",
-                  uploadDate: "2024-03-11",
-                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
-                  url: "https://www.instagram.com/baskentdilkonusma/",
-                },
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                item: {
-                  "@type": "VideoObject",
-                  name: "Yazma Güçlüğü (Disgrafi) Nedir?",
-                  description: "Disgrafi, bireyin el yazısı ve ince motor becerilerini etkileyen, yazma sürecini zorlaştıran bir öğrenme güçlüğüdür.",
-                  thumbnailUrl: "https://www.baskentdilkonusma.com/images/slider/slider-2.webp",
-                  uploadDate: "2024-03-11",
-                  embedUrl: "https://www.instagram.com/baskentdilkonusma/",
-                  url: "https://www.instagram.com/baskentdilkonusma/",
+                  contentUrl: "https://www.baskentdilkonusma.com/videos/video-dil-konusma.mp4",
+                  url: "https://www.baskentdilkonusma.com/videolar",
                 },
               },
             ],
@@ -119,10 +92,10 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Instagram Video Bölümü */}
+      {/* Videolar */}
       <section className="container py-14">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Kısa Videolar</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Eğitici Videolar</h2>
           <a
             href="https://www.instagram.com/baskentdilkonusma/"
             target="_blank"
@@ -132,45 +105,17 @@ export default function Page() {
             <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069Zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073Zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324ZM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881Z" />
             </svg>
-            Instagram'da Tüm Videolar
+            Instagram'da Daha Fazlası
           </a>
         </div>
 
-        <div className="mb-8 rounded-2xl border border-blue-100 bg-blue-50 p-6 text-center">
-          <p className="text-gray-600">
-            Tüm eğitici videolarımızı{" "}
-            <a
-              href="https://www.instagram.com/baskentdilkonusma/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-[#0077b6] hover:underline"
-            >
-              @baskentdilkonusma
-            </a>{" "}
-            Instagram hesabımızdan izleyebilirsiniz. Kısa ve bilgilendirici Reels videolarımız her hafta güncellenmektedir.
-          </p>
-        </div>
-
-        {/* Placeholder video kartları */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {Array.from({ length: videoSayisi }).map((_, i) => (
-            <a
-              key={i}
-              href="https://www.instagram.com/baskentdilkonusma/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative aspect-[9/16] overflow-hidden rounded-2xl bg-gradient-to-br from-[#0077b6]/20 to-[#0077b6]/5 transition hover:shadow-lg"
-            >
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#0077b6] text-white shadow-lg transition group-hover:scale-110">
-                  <svg className="h-7 w-7 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-                <p className="text-center text-xs font-medium text-gray-500">Instagram'da İzle</p>
-              </div>
-            </a>
-          ))}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <VideoPlayer
+            src="/videos/video-dil-konusma.mp4"
+            poster="/videos/video-dil-konusma-poster.jpg"
+            title="Dil ve Konuşma Bozuklukları"
+            description="Dil gelişim gecikmesi, artikülasyon bozukluğu ve kekemelik hakkında uzman bilgilendirmesi."
+          />
         </div>
       </section>
 
