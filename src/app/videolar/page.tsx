@@ -88,26 +88,26 @@ const videolar = [
   {
     src: "/videos/video-egitim-1.mp4",
     poster: "/videos/video-egitim-1-poster.jpg",
-    title: "Eğitim Videosu 1",
-    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+    title: "RAM Raporlu Bireylere Ücretsiz Disleksi Eğitimi",
+    description: "RAM raporu olan bireyler için devlet destekli ücretsiz disleksi eğitimi hakkında bilgi.",
   },
   {
     src: "/videos/video-egitim-2.mp4",
     poster: "/videos/video-egitim-2-poster.jpg",
-    title: "Eğitim Videosu 2",
-    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+    title: "Kurum Tanıtım",
+    description: "Başkent Dil ve Konuşma Merkezi, uzman kadrosu ve sunduğu hizmetler hakkında tanıtım.",
   },
   {
     src: "/videos/video-egitim-3.mp4",
     poster: "/videos/video-egitim-3-poster.jpg",
-    title: "Eğitim Videosu 3",
-    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+    title: "Apraksi ve Önemi",
+    description: "Motor konuşma planlama bozukluğu olan apraksi, belirtileri ve tedavi süreci.",
   },
   {
     src: "/videos/video-egitim-4.mp4",
     poster: "/videos/video-egitim-4-poster.jpg",
-    title: "Eğitim Videosu 4",
-    description: "Dil ve konuşma terapisi alanında uzmanlarımızdan bilgilendirici içerik.",
+    title: "Disgrafi",
+    description: "Yazma güçlüğünü etkileyen disgrafi: tanı süreci, belirtiler ve bireysel eğitim desteği.",
   },
 ];
 
