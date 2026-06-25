@@ -13,6 +13,7 @@ async function getStats(from: string, to: string, prevFrom: string) {
     topPages, devices, utmSources, countries,
     sessions, dailyTrend, heatmap, pageConv, returningStats,
     bounceStats, hourlyConversions, symptomStats,
+    activeNow, cities, avgDurationRes, formAbandonment,
   ] = await Promise.all([
 
     sql`
@@ -226,6 +227,54 @@ async function getStats(from: string, to: string, prevFrom: string) {
         AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
       GROUP BY 1 ORDER BY cnt DESC LIMIT 10
     `,
+
+    sql`
+      SELECT COUNT(DISTINCT session_id) AS active_now
+      FROM events
+      WHERE created_at > NOW() - INTERVAL '5 minutes'
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+    `,
+
+    sql`
+      SELECT COALESCE(city, 'Bilinmiyor') AS city, COUNT(DISTINCT session_id) AS cnt
+      FROM events
+      WHERE session_id IS NOT NULL
+        AND city IS NOT NULL AND city != ''
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      GROUP BY city ORDER BY cnt DESC LIMIT 8
+    `,
+
+    sql`
+      SELECT ROUND(AVG(duration_sec)) AS avg_duration
+      FROM (
+        SELECT session_id,
+          EXTRACT(EPOCH FROM (MAX(created_at) - MIN(created_at)))::int AS duration_sec
+        FROM events
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        GROUP BY session_id
+      ) s
+    `,
+
+    sql`
+      SELECT
+        COUNT(*) AS visited,
+        COUNT(*) FILTER (WHERE converted) AS converted,
+        ROUND(COUNT(*) FILTER (WHERE NOT converted) * 100.0 / NULLIF(COUNT(*), 0), 1) AS abandonment_rate
+      FROM (
+        SELECT
+          session_id,
+          bool_or(event_type IN ('phone_clicked','whatsapp_clicked','form_submitted')) AS converted
+        FROM events
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        GROUP BY session_id
+        HAVING bool_or(page ILIKE '%iletisim%')
+      ) s
+    `,
   ]);
 
   return {
@@ -235,6 +284,10 @@ async function getStats(from: string, to: string, prevFrom: string) {
     sessions, dailyTrend, heatmap, pageConv, returningStats,
     bounceStats: bounceStats[0],
     hourlyConversions, symptomStats,
+    activeNow: Number((activeNow[0] as { active_now: number }).active_now),
+    cities,
+    avgDuration: Number((avgDurationRes[0] as { avg_duration: number }).avg_duration) || 0,
+    formAbandonment: formAbandonment[0] as { visited: number; converted: number; abandonment_rate: number },
   };
 }
 
@@ -470,6 +523,7 @@ export default async function AnalyticsDashboard({
     topPages, devices, utmSources, countries,
     sessions, dailyTrend, heatmap, pageConv, returningStats,
     bounceStats, hourlyConversions, symptomStats,
+    activeNow, cities, avgDuration, formAbandonment,
   } = await getStats(from, to, prevFrom);
 
   return (
@@ -521,6 +575,13 @@ export default async function AnalyticsDashboard({
           dailyTrend={dailyTrend as { day: string; pv: number; conversions: number }[]}
           dateLabel={dateLabel}
           days={days}
+          activeNow={activeNow}
+          avgDuration={avgDuration}
+          formAbandonment={{
+            visited:          Number(formAbandonment?.visited ?? 0),
+            converted:        Number(formAbandonment?.converted ?? 0),
+            abandonment_rate: Number(formAbandonment?.abandonment_rate ?? 0),
+          }}
         />
 
         {/* Charts grid */}
@@ -540,6 +601,10 @@ export default async function AnalyticsDashboard({
           <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
             <h2 className="mb-5 font-semibold text-gray-900">Ülkeler</h2>
             <BarChart data={countries.map((r: { country: string; cnt: number }) => ({ label: r.country, value: Number(r.cnt) }))} colorClass="bg-teal-500" />
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 font-semibold text-gray-900">Şehirler</h2>
+            <BarChart data={(cities as { city: string; cnt: number }[]).map((r) => ({ label: r.city, value: Number(r.cnt) }))} colorClass="bg-indigo-500" />
           </div>
         </div>
 

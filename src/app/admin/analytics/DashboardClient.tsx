@@ -21,9 +21,18 @@ function calcDelta(cur: number, prev: number): number | null {
   return Math.round(((cur - prev) / prev) * 100);
 }
 
+function formatDuration(sec: number): string {
+  if (!sec || sec < 1) return "—";
+  if (sec < 60) return `${sec}s`;
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return s > 0 ? `${m}dk ${s}s` : `${m}dk`;
+}
+
 function StatCard({
   label,
   value,
+  displayValue,
   icon,
   color = "blue",
   filterKey,
@@ -35,6 +44,7 @@ function StatCard({
 }: {
   label: string;
   value: number;
+  displayValue?: string;
   icon: React.ReactNode;
   color?: "blue" | "green" | "orange" | "pink" | "purple" | "teal" | "red";
   filterKey?: ConversionFilter;
@@ -81,7 +91,7 @@ function StatCard({
         <span className={`rounded-lg p-2 ${bg[color]}`}>{icon}</span>
       </div>
       <p className="mt-3 text-3xl font-bold text-gray-900">
-        {Number(value).toLocaleString("tr-TR")}{suffix}
+        {displayValue ?? (Number(value).toLocaleString("tr-TR") + (suffix ?? ""))}
       </p>
       <div className="mt-1 flex min-h-[1rem] items-center justify-between gap-1">
         {delta != null ? (
@@ -317,6 +327,9 @@ export default function DashboardClient({
   dailyTrend,
   dateLabel,
   days,
+  activeNow,
+  avgDuration,
+  formAbandonment,
 }: {
   overview: Overview;
   prevOverview: Overview;
@@ -325,6 +338,9 @@ export default function DashboardClient({
   dailyTrend: TrendPoint[];
   dateLabel: string;
   days: number;
+  activeNow: number;
+  avgDuration: number;
+  formAbandonment: { visited: number; converted: number; abandonment_rate: number };
 }) {
   const router = useRouter();
   const [conversionFilter, setConversionFilter] = useState<ConversionFilter>(null);
@@ -371,11 +387,19 @@ export default function DashboardClient({
     <>
       {/* Auto-refresh bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white px-4 py-2.5 shadow-sm">
-        <span className="text-xs text-gray-400">
-          {lastRefresh
-            ? `Son güncelleme: ${lastRefresh.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
-            : "Canlı veri"}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-400">
+            {lastRefresh
+              ? `Son güncelleme: ${lastRefresh.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
+              : "Canlı veri"}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <span className={`h-2 w-2 rounded-full ${activeNow > 0 ? "animate-pulse bg-green-500" : "bg-gray-300"}`} />
+            <span className="text-xs font-medium text-gray-700">
+              {activeNow > 0 ? `${activeNow} kişi şu an sitede` : "Şu an ziyaretçi yok"}
+            </span>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center gap-3">
           {reportMsg && (
             <span className="text-xs font-medium text-green-600">{reportMsg}</span>
@@ -408,7 +432,7 @@ export default function DashboardClient({
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">
           Genel Bakış — {dateLabel}
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8">
           <StatCard
             label="Sayfa Görüntüleme (Bugün)"
             value={Number(overview.pv_today)}
@@ -467,6 +491,13 @@ export default function DashboardClient({
             onClick={() => toggle("form")}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
           />
+          <StatCard
+            label="Ort. Oturum Süresi"
+            value={avgDuration}
+            displayValue={formatDuration(avgDuration)}
+            color="blue"
+            icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          />
         </div>
       </section>
 
@@ -483,6 +514,39 @@ export default function DashboardClient({
         <Funnel sessions={sessions} />
         <SourceConvTable sessions={sessions} />
       </div>
+
+      {/* Form abandonment */}
+      {formAbandonment.visited > 0 && (
+        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <h2 className="mb-5 font-semibold text-gray-900">İletişim Sayfası Terk Analizi</h2>
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-3">
+            <div className="rounded-lg bg-blue-50 p-4 text-center">
+              <div className="text-2xl font-bold text-blue-700">{formAbandonment.visited}</div>
+              <div className="mt-1 text-xs text-blue-600">İletişim sayfasını açtı</div>
+            </div>
+            <div className="rounded-lg bg-green-50 p-4 text-center">
+              <div className="text-2xl font-bold text-green-700">{formAbandonment.converted}</div>
+              <div className="mt-1 text-xs text-green-600">Dönüşüm yaptı</div>
+            </div>
+            <div className="rounded-lg bg-red-50 p-4 text-center">
+              <div className="text-2xl font-bold text-red-700">%{formAbandonment.abandonment_rate}</div>
+              <div className="mt-1 text-xs text-red-600">Terk oranı</div>
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="mb-1.5 flex justify-between text-xs text-gray-400">
+              <span>Dönüşüm</span>
+              <span>Terk</span>
+            </div>
+            <div className="flex h-3 overflow-hidden rounded-full bg-red-100">
+              <div
+                className="h-3 rounded-full bg-green-500 transition-all"
+                style={{ width: `${formAbandonment.visited > 0 ? Math.round((formAbandonment.converted / formAbandonment.visited) * 100) : 0}%` }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sessions */}
       <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
