@@ -14,6 +14,7 @@ async function getStats(from: string, to: string, prevFrom: string) {
     sessions, dailyTrend, heatmap, pageConv, returningStats,
     bounceStats, hourlyConversions, symptomStats,
     activeNow, cities, avgDurationRes, formAbandonment,
+    exitPages, browsers,
   ] = await Promise.all([
 
     sql`
@@ -275,6 +276,31 @@ async function getStats(from: string, to: string, prevFrom: string) {
         HAVING bool_or(page ILIKE '%iletisim%')
       ) s
     `,
+
+    sql`
+      SELECT exit_page AS page, COUNT(*) AS cnt
+      FROM (
+        SELECT DISTINCT ON (session_id) session_id, page AS exit_page
+        FROM events
+        WHERE session_id IS NOT NULL
+          AND (page IS NULL OR page NOT LIKE '/admin%')
+          AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+        ORDER BY session_id, created_at DESC
+      ) s
+      WHERE exit_page IS NOT NULL
+      GROUP BY exit_page
+      ORDER BY cnt DESC LIMIT 8
+    `,
+
+    sql`
+      SELECT COALESCE(browser, 'Bilinmiyor') AS browser, COUNT(DISTINCT session_id) AS cnt
+      FROM events
+      WHERE session_id IS NOT NULL
+        AND browser IS NOT NULL
+        AND (page IS NULL OR page NOT LIKE '/admin%')
+        AND created_at > ${from}::timestamptz AND created_at <= ${to}::timestamptz
+      GROUP BY browser ORDER BY cnt DESC LIMIT 6
+    `,
   ]);
 
   return {
@@ -288,6 +314,8 @@ async function getStats(from: string, to: string, prevFrom: string) {
     cities,
     avgDuration: Number((avgDurationRes[0] as { avg_duration: number }).avg_duration) || 0,
     formAbandonment: formAbandonment[0] as { visited: number; converted: number; abandonment_rate: number },
+    exitPages,
+    browsers,
   };
 }
 
@@ -524,6 +552,7 @@ export default async function AnalyticsDashboard({
     sessions, dailyTrend, heatmap, pageConv, returningStats,
     bounceStats, hourlyConversions, symptomStats,
     activeNow, cities, avgDuration, formAbandonment,
+    exitPages, browsers,
   } = await getStats(from, to, prevFrom);
 
   return (
@@ -605,6 +634,14 @@ export default async function AnalyticsDashboard({
           <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
             <h2 className="mb-5 font-semibold text-gray-900">Şehirler</h2>
             <BarChart data={(cities as { city: string; cnt: number }[]).map((r) => ({ label: r.city, value: Number(r.cnt) }))} colorClass="bg-indigo-500" />
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 font-semibold text-gray-900">Çıkış Sayfaları</h2>
+            <BarChart data={(exitPages as { page: string; cnt: number }[]).map((r) => ({ label: r.page || "/", value: Number(r.cnt) }))} colorClass="bg-rose-400" />
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 font-semibold text-gray-900">Tarayıcı Dağılımı</h2>
+            <BarChart data={(browsers as { browser: string; cnt: number }[]).map((r) => ({ label: r.browser, value: Number(r.cnt) }))} colorClass="bg-amber-500" />
           </div>
         </div>
 
