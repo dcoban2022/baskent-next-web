@@ -48,6 +48,45 @@ const bilgiler = [
   },
 ];
 
+const videolar = [
+  {
+    src: "/videos/video-dil-konusma.mp4",
+    poster: "/videos/video-dil-konusma-poster.jpg",
+    title: "Dil ve Konuşma Bozuklukları",
+    description: "Dil gelişim gecikmesi, artikülasyon bozukluğu ve kekemelik hakkında uzman bilgilendirmesi.",
+  },
+  {
+    src: "/videos/video-kekemelik.mp4",
+    poster: "/videos/video-kekemelik-poster.jpg",
+    title: "Kekemelik Eğitimi",
+    description: "Akıcı konuşma için uygulanan terapi yöntemleri ve eğitim süreci hakkında bilgi.",
+  },
+  {
+    src: "/videos/video-disleksi.mp4",
+    poster: "/videos/video-disleksi-poster.jpg",
+    title: "Özgül Dil Bozukluğu & Disleksi",
+    description: "Okuma ve öğrenme güçlükleri yaşayan bireyler için uzman değerlendirme ve eğitim.",
+  },
+  {
+    src: "/videos/video-afazi.mp4",
+    poster: "/videos/video-afazi-poster.jpg",
+    title: "Afazi Nedir?",
+    description: "Beyin hasarı sonrası gelişen dil bozukluğu, belirtileri ve rehabilitasyon süreci.",
+  },
+  {
+    src: "/videos/video-gecikmis-konusma.mp4",
+    poster: "/videos/video-gecikmis-konusma-poster.jpg",
+    title: "Gecikmiş Konuşma",
+    description: "Konuşma gelişiminde gecikme yaşayan çocuklar için erken müdahale ve terapi.",
+  },
+  {
+    src: "/videos/video-terapist.mp4",
+    poster: "/videos/video-terapist-poster.jpg",
+    title: "Dil Konuşma Terapisti Ne Yapar?",
+    description: "Uzman dil ve konuşma terapistinin görevleri, çalışma alanları ve sunduğu hizmetler.",
+  },
+];
+
 export default function Page() {
   return (
     <main className="pt-[116px]">
@@ -60,22 +99,20 @@ export default function Page() {
             name: "Başkent Dil Konuşma Eğitici Videoları",
             description: "Disleksi, öğrenme güçlükleri ve dil konuşma bozuklukları hakkında eğitici videolar.",
             url: "https://www.baskentdilkonusma.com/videolar",
-            numberOfItems: 1,
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                item: {
-                  "@type": "VideoObject",
-                  name: "Dil ve Konuşma Bozuklukları",
-                  description: "Dil gelişim gecikmesi, artikülasyon bozukluğu ve kekemelik hakkında uzman bilgilendirme videosu.",
-                  thumbnailUrl: "https://www.baskentdilkonusma.com/videos/video-dil-konusma-poster.jpg",
-                  uploadDate: "2024-03-11",
-                  contentUrl: "https://www.baskentdilkonusma.com/videos/video-dil-konusma.mp4",
-                  url: "https://www.baskentdilkonusma.com/videolar",
-                },
+            numberOfItems: videolar.length,
+            itemListElement: videolar.map((v, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "VideoObject",
+                name: v.title,
+                description: v.description,
+                thumbnailUrl: `https://www.baskentdilkonusma.com${v.poster}`,
+                uploadDate: "2024-03-11",
+                contentUrl: `https://www.baskentdilkonusma.com${v.src}`,
+                url: "https://www.baskentdilkonusma.com/videolar",
               },
-            ],
+            })),
           }),
         }}
       />
@@ -110,12 +147,15 @@ export default function Page() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <VideoPlayer
-            src="/videos/video-dil-konusma.mp4"
-            poster="/videos/video-dil-konusma-poster.jpg"
-            title="Dil ve Konuşma Bozuklukları"
-            description="Dil gelişim gecikmesi, artikülasyon bozukluğu ve kekemelik hakkında uzman bilgilendirmesi."
-          />
+          {videolar.map((v) => (
+            <VideoPlayer
+              key={v.src}
+              src={v.src}
+              poster={v.poster}
+              title={v.title}
+              description={v.description}
+            />
+          ))}
         </div>
       </section>
 
