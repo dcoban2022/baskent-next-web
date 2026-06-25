@@ -17,6 +17,9 @@ export type Session = {
   effective_source: string;
   referrer: string;
   converted: boolean;
+  had_phone: boolean;
+  had_whatsapp: boolean;
+  had_form: boolean;
   events: string;
 };
 
@@ -233,7 +236,9 @@ function SessionDetail({ sessionId }: { sessionId: string }) {
   );
 }
 
-export default function SessionsTab({ sessions }: { sessions: Session[] }) {
+type ConversionFilter = "phone" | "whatsapp" | "form" | null;
+
+export default function SessionsTab({ sessions, conversionFilter }: { sessions: Session[]; conversionFilter?: ConversionFilter }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [sourceFilter, setSourceFilter] = useState<string | null>(null);
   const [deviceFilter, setDeviceFilter] = useState<string | null>(null);
@@ -245,13 +250,16 @@ export default function SessionsTab({ sessions }: { sessions: Session[] }) {
   const countries = useMemo(() => [...new Set(sessions.map((s) => s.country || "unknown"))].sort(), [sessions]);
 
   const filtered = useMemo(() => sessions.filter((s) => {
+    if (conversionFilter === "phone" && !s.had_phone) return false;
+    if (conversionFilter === "whatsapp" && !s.had_whatsapp) return false;
+    if (conversionFilter === "form" && !s.had_form) return false;
     if (sourceFilter && (s.effective_source || s.utm_source || "direct") !== sourceFilter) return false;
     if (deviceFilter && (s.device_type || "desktop") !== deviceFilter) return false;
     if (countryFilter && (s.country || "unknown") !== countryFilter) return false;
     if (statusFilter === "converted" && !s.converted) return false;
     if (statusFilter === "not_converted" && s.converted) return false;
     return true;
-  }), [sessions, sourceFilter, deviceFilter, countryFilter, statusFilter]);
+  }), [sessions, conversionFilter, sourceFilter, deviceFilter, countryFilter, statusFilter]);
 
   const converted = filtered.filter((s) => s.converted).length;
   const rate = filtered.length ? Math.round((converted / filtered.length) * 100) : 0;
