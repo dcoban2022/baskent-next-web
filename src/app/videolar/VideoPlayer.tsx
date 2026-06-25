@@ -25,13 +25,14 @@ export default function VideoPlayer({ src, poster, title, description }: VideoPl
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-      <div className="group relative bg-gray-900">
+      <div className="group relative aspect-video bg-gray-900">
         <video
           ref={ref}
           src={src}
           poster={poster}
-          className="w-full"
+          className="h-full w-full object-cover"
           playsInline
+          preload="none"
           onEnded={() => setPlaying(false)}
         />
         <button
