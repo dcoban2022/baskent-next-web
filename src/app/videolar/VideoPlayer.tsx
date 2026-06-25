@@ -29,12 +29,21 @@ export default function VideoPlayer({ src, poster, title, description }: VideoPl
         <video
           ref={ref}
           src={src}
-          poster={poster}
           className="h-full w-full object-cover"
           playsInline
           preload="none"
-          onEnded={() => setPlaying(false)}
+          onEnded={() => { setPlaying(false); }}
         />
+
+        {/* Poster overlay — hides when playing */}
+        {!playing && (
+          <img
+            src={poster}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+
         <button
           onClick={toggle}
           aria-label={playing ? "Duraklat" : "Oynat"}
