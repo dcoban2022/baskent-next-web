@@ -11,6 +11,10 @@ export async function POST(req: NextRequest) {
       language, timezone, screen, is_returning, connection,
     } = body;
 
+    if (typeof page === "string" && page.startsWith("/admin")) {
+      return NextResponse.json({ ok: true });
+    }
+
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       req.headers.get("x-real-ip") ||
