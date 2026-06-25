@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import SessionsTab, { type Session } from "./SessionsTab";
 
 type ConversionFilter = "phone" | "whatsapp" | "form" | null;
@@ -15,6 +16,11 @@ type Overview = {
 
 type SparkPoint = { day: string; pv: number };
 
+function calcDelta(cur: number, prev: number): number | null {
+  if (!prev) return null;
+  return Math.round(((cur - prev) / prev) * 100);
+}
+
 function StatCard({
   label,
   value,
@@ -23,6 +29,7 @@ function StatCard({
   filterKey,
   active,
   onClick,
+  delta,
 }: {
   label: string;
   value: number;
@@ -31,6 +38,7 @@ function StatCard({
   filterKey?: ConversionFilter;
   active?: boolean;
   onClick?: () => void;
+  delta?: number | null;
 }) {
   const bg: Record<string, string> = {
     blue:   "bg-blue-50 text-blue-600",
@@ -61,11 +69,18 @@ function StatCard({
         <span className={`rounded-lg p-2 ${bg[color]}`}>{icon}</span>
       </div>
       <p className="mt-3 text-3xl font-bold text-gray-900">{Number(value).toLocaleString("tr-TR")}</p>
-      {filterKey && (
-        <p className={`mt-1 text-xs ${active ? "font-semibold text-[#0077b6]" : "text-gray-400"}`}>
-          {active ? "✓ Filtreleniyor — temizlemek için tıkla" : "Filtrelemek için tıkla"}
-        </p>
-      )}
+      <div className="mt-1 flex min-h-[1rem] items-center justify-between gap-1">
+        {delta !== null && delta !== undefined ? (
+          <span className={`text-xs font-semibold ${delta >= 0 ? "text-green-600" : "text-red-500"}`}>
+            {delta >= 0 ? "↑" : "↓"}{Math.abs(delta)}% önceki dönem
+          </span>
+        ) : <span />}
+        {filterKey && (
+          <span className={`text-xs ${active ? "font-semibold text-[#0077b6]" : "text-gray-400"}`}>
+            {active ? "✓ Filtre aktif" : "Filtrele →"}
+          </span>
+        )}
+      </div>
     </button>
   );
 }
@@ -79,7 +94,7 @@ function Sparkline({ data }: { data: SparkPoint[] }) {
         <div
           key={d.day}
           title={`${new Date(d.day).toLocaleDateString("tr-TR", { month: "short", day: "numeric" })}: ${d.pv}`}
-          className="flex-1 rounded-t bg-blue-200 hover:bg-blue-400 transition-colors cursor-default"
+          className="flex-1 cursor-default rounded-t bg-blue-200 transition-colors hover:bg-blue-400"
           style={{ height: `${(Number(d.pv) / max) * 100}%`, minHeight: 2 }}
         />
       ))}
@@ -87,18 +102,117 @@ function Sparkline({ data }: { data: SparkPoint[] }) {
   );
 }
 
+function Funnel({ sessions }: { sessions: Session[] }) {
+  const steps = [
+    { label: "Tüm Ziyaretler", value: sessions.length, color: "bg-[#0077b6]" },
+    { label: "2+ Sayfa Gezdi", value: sessions.filter((s) => Number(s.page_count) >= 2).length, color: "bg-blue-500" },
+    { label: "Dönüşüm Yaptı", value: sessions.filter((s) => s.converted).length, color: "bg-green-500" },
+  ];
+  const max = steps[0].value || 1;
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <h2 className="mb-5 font-semibold text-gray-900">Dönüşüm Hunisi</h2>
+      <div className="space-y-4">
+        {steps.map((step, i) => {
+          const pct = Math.round((step.value / max) * 100);
+          return (
+            <div key={i}>
+              <div className="mb-1.5 flex justify-between text-xs">
+                <span className="font-medium text-gray-700">{step.label}</span>
+                <span className="text-gray-500">
+                  {step.value.toLocaleString("tr-TR")}
+                  <span className="ml-1.5 text-gray-400">(%{pct})</span>
+                </span>
+              </div>
+              <div className="h-7 overflow-hidden rounded-lg bg-gray-100">
+                <div className={`h-7 rounded-lg transition-all ${step.color}`} style={{ width: `${pct}%` }} />
+              </div>
+              {i < steps.length - 1 && step.value > 0 && steps[i + 1].value > 0 && (
+                <p className="mt-1 text-right text-[11px] text-gray-400">
+                  ↓ %{Math.round((steps[i + 1].value / step.value) * 100)} sonraki adıma geçti
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SourceConvTable({ sessions }: { sessions: Session[] }) {
+  const rows = useMemo(() => {
+    const map = new Map<string, { total: number; converted: number }>();
+    for (const s of sessions) {
+      const src = s.effective_source || s.utm_source || "direct";
+      const cur = map.get(src) ?? { total: 0, converted: 0 };
+      map.set(src, { total: cur.total + 1, converted: cur.converted + (s.converted ? 1 : 0) });
+    }
+    return [...map.entries()]
+      .map(([src, d]) => ({ src, ...d, rate: d.total ? Math.round((d.converted / d.total) * 100) : 0 }))
+      .sort((a, b) => b.total - a.total);
+  }, [sessions]);
+
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <h2 className="mb-5 font-semibold text-gray-900">Kaynak × Dönüşüm</h2>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-gray-100 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+            <th className="pb-3">Kaynak</th>
+            <th className="pb-3 text-right">Oturum</th>
+            <th className="pb-3 text-right">Dönüşüm</th>
+            <th className="pb-3 text-right">Oran</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-50">
+          {rows.map((r) => (
+            <tr key={r.src} className="hover:bg-gray-50/50">
+              <td className="py-2.5 font-medium text-gray-700">{r.src}</td>
+              <td className="py-2.5 text-right text-gray-600">{r.total}</td>
+              <td className="py-2.5 text-right text-gray-600">{r.converted}</td>
+              <td className="py-2.5 text-right">
+                <span className={`font-semibold ${r.rate > 0 ? "text-green-600" : "text-gray-300"}`}>
+                  %{r.rate}
+                </span>
+              </td>
+            </tr>
+          ))}
+          {rows.length === 0 && (
+            <tr><td colSpan={4} className="py-6 text-center text-xs text-gray-400">Veri yok</td></tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function DashboardClient({
   overview,
+  prevOverview,
   sessions,
   sparkline,
   days,
 }: {
   overview: Overview;
+  prevOverview: Overview;
   sessions: Session[];
   sparkline: SparkPoint[];
   days: number;
 }) {
+  const router = useRouter();
   const [conversionFilter, setConversionFilter] = useState<ConversionFilter>(null);
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+
+  useEffect(() => {
+    if (!autoRefresh) return;
+    const id = setInterval(() => {
+      router.refresh();
+      setLastRefresh(new Date());
+    }, 5 * 60 * 1000);
+    return () => clearInterval(id);
+  }, [autoRefresh, router]);
 
   function toggle(key: ConversionFilter) {
     setConversionFilter((prev) => (prev === key ? null : key));
@@ -106,6 +220,30 @@ export default function DashboardClient({
 
   return (
     <>
+      {/* Auto-refresh bar */}
+      <div className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-2.5 shadow-sm">
+        <span className="text-xs text-gray-400">
+          {lastRefresh
+            ? `Son güncelleme: ${lastRefresh.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
+            : "Canlı veri"}
+        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-500">Otomatik yenileme (5 dk)</span>
+          <button
+            onClick={() => { setAutoRefresh((v) => !v); if (!autoRefresh) setLastRefresh(new Date()); }}
+            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${autoRefresh ? "bg-[#0077b6]" : "bg-gray-200"}`}
+          >
+            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${autoRefresh ? "translate-x-4" : "translate-x-0.5"}`} />
+          </button>
+          <button
+            onClick={() => { router.refresh(); setLastRefresh(new Date()); }}
+            className="rounded-lg border border-gray-200 px-2.5 py-1 text-xs text-gray-600 transition hover:border-gray-300 hover:bg-gray-50"
+          >
+            ↻ Yenile
+          </button>
+        </div>
+      </div>
+
       {/* KPI Cards */}
       <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400">
@@ -122,18 +260,21 @@ export default function DashboardClient({
             label={`Sayfa Görüntüleme (${days} Gün)`}
             value={Number(overview.pv_period)}
             color="purple"
+            delta={calcDelta(Number(overview.pv_period), Number(prevOverview.pv_period))}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
           />
           <StatCard
             label="Tekil Ziyaretçi"
             value={Number(overview.uniq_visitors)}
             color="teal"
+            delta={calcDelta(Number(overview.uniq_visitors), Number(prevOverview.uniq_visitors))}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
           />
           <StatCard
             label="Telefon Tıklaması"
             value={Number(overview.phone)}
             color="orange"
+            delta={calcDelta(Number(overview.phone), Number(prevOverview.phone))}
             filterKey="phone"
             active={conversionFilter === "phone"}
             onClick={() => toggle("phone")}
@@ -143,6 +284,7 @@ export default function DashboardClient({
             label="WhatsApp Tıklaması"
             value={Number(overview.wa)}
             color="green"
+            delta={calcDelta(Number(overview.wa), Number(prevOverview.wa))}
             filterKey="whatsapp"
             active={conversionFilter === "whatsapp"}
             onClick={() => toggle("whatsapp")}
@@ -152,6 +294,7 @@ export default function DashboardClient({
             label="Form Gönderimi"
             value={Number(overview.form)}
             color="pink"
+            delta={calcDelta(Number(overview.form), Number(prevOverview.form))}
             filterKey="form"
             active={conversionFilter === "form"}
             onClick={() => toggle("form")}
@@ -171,8 +314,14 @@ export default function DashboardClient({
         </div>
       )}
 
+      {/* Funnel + Source×Conv */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Funnel sessions={sessions} />
+        <SourceConvTable sessions={sessions} />
+      </div>
+
       {/* Sessions */}
-      <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h2 className="font-semibold text-gray-900">Oturumlar</h2>

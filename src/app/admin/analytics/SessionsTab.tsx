@@ -238,8 +238,37 @@ function SessionDetail({ sessionId }: { sessionId: string }) {
 
 type ConversionFilter = "phone" | "whatsapp" | "form" | null;
 
+function downloadCSV(sessions: Session[]) {
+  const headers = ["Tarih", "Kaynak", "Cihaz", "Ülke", "Şehir", "IP", "Giriş Sayfası", "Çıkış Sayfası", "Süre (sn)", "Sayfa Sayısı", "Dönüşüm", "Telefon", "WhatsApp", "Form"];
+  const rows = sessions.map((s) => [
+    new Date(s.started_at).toLocaleString("tr-TR"),
+    s.effective_source || s.utm_source || "direct",
+    s.device_type || "desktop",
+    s.country || "",
+    s.city || "",
+    s.ip || "",
+    s.entry_page || "/",
+    s.exit_page || "",
+    s.duration_sec,
+    s.page_count,
+    s.converted ? "Evet" : "Hayır",
+    s.had_phone ? "Evet" : "Hayır",
+    s.had_whatsapp ? "Evet" : "Hayır",
+    s.had_form ? "Evet" : "Hayır",
+  ]);
+  const csv = [headers, ...rows].map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `oturumlar-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function SessionsTab({ sessions, conversionFilter }: { sessions: Session[]; conversionFilter?: ConversionFilter }) {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [sourceFilter, setSourceFilter] = useState<string | null>(null);
   const [deviceFilter, setDeviceFilter] = useState<string | null>(null);
   const [countryFilter, setCountryFilter] = useState<string | null>(null);
@@ -249,28 +278,48 @@ export default function SessionsTab({ sessions, conversionFilter }: { sessions: 
   const devices = useMemo(() => [...new Set(sessions.map((s) => s.device_type || "desktop"))].sort(), [sessions]);
   const countries = useMemo(() => [...new Set(sessions.map((s) => s.country || "unknown"))].sort(), [sessions]);
 
-  const filtered = useMemo(() => sessions.filter((s) => {
-    if (conversionFilter === "phone" && !s.had_phone) return false;
-    if (conversionFilter === "whatsapp" && !s.had_whatsapp) return false;
-    if (conversionFilter === "form" && !s.had_form) return false;
-    if (sourceFilter && (s.effective_source || s.utm_source || "direct") !== sourceFilter) return false;
-    if (deviceFilter && (s.device_type || "desktop") !== deviceFilter) return false;
-    if (countryFilter && (s.country || "unknown") !== countryFilter) return false;
-    if (statusFilter === "converted" && !s.converted) return false;
-    if (statusFilter === "not_converted" && s.converted) return false;
-    return true;
-  }), [sessions, conversionFilter, sourceFilter, deviceFilter, countryFilter, statusFilter]);
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return sessions.filter((s) => {
+      if (conversionFilter === "phone" && !s.had_phone) return false;
+      if (conversionFilter === "whatsapp" && !s.had_whatsapp) return false;
+      if (conversionFilter === "form" && !s.had_form) return false;
+      if (sourceFilter && (s.effective_source || s.utm_source || "direct") !== sourceFilter) return false;
+      if (deviceFilter && (s.device_type || "desktop") !== deviceFilter) return false;
+      if (countryFilter && (s.country || "unknown") !== countryFilter) return false;
+      if (statusFilter === "converted" && !s.converted) return false;
+      if (statusFilter === "not_converted" && s.converted) return false;
+      if (q && !s.ip?.includes(q) && !(s.city || "").toLowerCase().includes(q) && !(s.country || "").toLowerCase().includes(q) && !(s.entry_page || "").toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [sessions, conversionFilter, sourceFilter, deviceFilter, countryFilter, statusFilter, searchQuery]);
 
   const converted = filtered.filter((s) => s.converted).length;
   const rate = filtered.length ? Math.round((converted / filtered.length) * 100) : 0;
   const avgDuration = filtered.length
     ? Math.round(filtered.reduce((sum, s) => sum + Number(s.duration_sec), 0) / filtered.length) : 0;
-  const hasFilters = sourceFilter || deviceFilter || countryFilter || statusFilter;
+  const hasFilters = searchQuery || sourceFilter || deviceFilter || countryFilter || statusFilter;
 
   return (
     <div>
       {/* Filters */}
       <div className="space-y-2.5 border-b border-gray-100 bg-gray-50/50 px-6 py-4">
+        {/* Search */}
+        <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 focus-within:border-[#0077b6] focus-within:ring-1 focus-within:ring-[#0077b6]/20">
+          <svg className="h-3.5 w-3.5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="IP, şehir, ülke veya sayfa ara…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 bg-transparent text-xs text-gray-700 placeholder-gray-400 outline-none"
+          />
+          {searchQuery && (
+            <button onClick={() => setSearchQuery("")} className="text-gray-400 hover:text-gray-600">×</button>
+          )}
+        </div>
         {[
           { label: "Kaynak", items: sources, active: sourceFilter, set: setSourceFilter },
           { label: "Cihaz", items: devices, active: deviceFilter, set: setDeviceFilter, labelMap: { mobile: "📱 Mobil", tablet: "📟 Tablet", desktop: "🖥 Masaüstü" } as Record<string, string> },
@@ -290,10 +339,17 @@ export default function SessionsTab({ sessions, conversionFilter }: { sessions: 
           <FilterChip label="✓ Dönüşüm Var" active={statusFilter === "converted"} onClick={() => setStatusFilter(statusFilter === "converted" ? null : "converted")} />
           <FilterChip label="Dönüşüm Yok" active={statusFilter === "not_converted"} onClick={() => setStatusFilter(statusFilter === "not_converted" ? null : "not_converted")} />
           {hasFilters && (
-            <button onClick={() => { setSourceFilter(null); setDeviceFilter(null); setCountryFilter(null); setStatusFilter(null); }} className="ml-1 text-xs text-gray-400 underline hover:text-gray-600">
+            <button onClick={() => { setSearchQuery(""); setSourceFilter(null); setDeviceFilter(null); setCountryFilter(null); setStatusFilter(null); }} className="ml-1 text-xs text-gray-400 underline hover:text-gray-600">
               Temizle
             </button>
           )}
+          <button
+            onClick={() => downloadCSV(filtered)}
+            className="ml-auto flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1 text-xs font-medium text-[#0077b6] transition hover:border-[#0077b6]/30 hover:bg-blue-50"
+          >
+            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            CSV İndir ({filtered.length})
+          </button>
         </div>
       </div>
 

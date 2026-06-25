@@ -6,11 +6,11 @@ import DashboardClient from "./DashboardClient";
 import { type Session } from "./SessionsTab";
 
 async function getStats(days: number) {
-  // Use JS-computed cutoff to avoid make_interval parameterization issues with Neon
-  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const cutoff     = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  const prevCutoff = new Date(Date.now() - 2 * days * 24 * 60 * 60 * 1000).toISOString();
+  const yesterday  = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-  const [overview, topPages, devices, utmSources, countries, sessions, hourly] = await Promise.all([
+  const [overview, prevOverview, topPages, devices, utmSources, countries, sessions, hourly, heatmap, pageConv, returningStats] = await Promise.all([
     sql`
       SELECT
         COUNT(*) FILTER (WHERE event_type = 'page_view' AND created_at > ${yesterday}::timestamptz) AS pv_today,
@@ -20,6 +20,16 @@ async function getStats(days: number) {
         COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked' AND created_at > ${cutoff}::timestamptz) AS wa,
         COUNT(*) FILTER (WHERE event_type = 'form_submitted' AND created_at > ${cutoff}::timestamptz) AS form
       FROM events
+    `,
+    sql`
+      SELECT
+        COUNT(*) FILTER (WHERE event_type = 'page_view') AS pv_period,
+        COUNT(DISTINCT ip) AS uniq_visitors,
+        COUNT(*) FILTER (WHERE event_type = 'phone_clicked') AS phone,
+        COUNT(*) FILTER (WHERE event_type = 'whatsapp_clicked') AS wa,
+        COUNT(*) FILTER (WHERE event_type = 'form_submitted') AS form
+      FROM events
+      WHERE created_at > ${prevCutoff}::timestamptz AND created_at <= ${cutoff}::timestamptz
     `,
     sql`
       SELECT page, COUNT(*) AS cnt
@@ -110,9 +120,47 @@ async function getStats(days: number) {
       WHERE created_at > ${cutoff}::timestamptz
       GROUP BY 1 ORDER BY 1 ASC
     `,
+    sql`
+      SELECT
+        EXTRACT(DOW FROM created_at AT TIME ZONE 'Europe/Istanbul')::int AS dow,
+        EXTRACT(HOUR FROM created_at AT TIME ZONE 'Europe/Istanbul')::int AS hour,
+        COUNT(*) AS cnt
+      FROM events
+      WHERE event_type = 'page_view' AND created_at > ${cutoff}::timestamptz
+      GROUP BY 1, 2 ORDER BY 1, 2
+    `,
+    sql`
+      SELECT
+        entry_page AS page,
+        COUNT(*) AS sessions,
+        COUNT(*) FILTER (WHERE converted) AS conversions,
+        ROUND(COUNT(*) FILTER (WHERE converted) * 100.0 / NULLIF(COUNT(*), 0), 1) AS conv_rate
+      FROM (
+        SELECT
+          MIN(page) AS entry_page,
+          bool_or(event_type IN ('phone_clicked', 'whatsapp_clicked', 'form_submitted')) AS converted
+        FROM events
+        WHERE session_id IS NOT NULL AND created_at > ${cutoff}::timestamptz
+        GROUP BY session_id
+      ) s
+      GROUP BY entry_page
+      ORDER BY sessions DESC LIMIT 8
+    `,
+    sql`
+      SELECT
+        CASE WHEN is_returning THEN 'returning' ELSE 'new' END AS visitor_type,
+        COUNT(*) AS cnt
+      FROM (
+        SELECT session_id, bool_or(is_returning) AS is_returning
+        FROM events
+        WHERE session_id IS NOT NULL AND created_at > ${cutoff}::timestamptz
+        GROUP BY session_id
+      ) s
+      GROUP BY 1
+    `,
   ]);
 
-  return { overview: overview[0], topPages, devices, utmSources, countries, sessions, hourly };
+  return { overview: overview[0], prevOverview: prevOverview[0], topPages, devices, utmSources, countries, sessions, hourly, heatmap, pageConv, returningStats };
 }
 
 // ── Horizontal Bar Chart ─────────────────────────────────────────────────────
@@ -177,6 +225,103 @@ function DeviceChart({ data }: { data: { device: string; cnt: number }[] }) {
   );
 }
 
+// ── Heatmap (DOW × hour) ─────────────────────────────────────────────────────
+function HeatmapChart({ data }: { data: { dow: number; hour: number; cnt: number }[] }) {
+  const matrix: number[][] = Array.from({ length: 7 }, () => Array(24).fill(0));
+  for (const { dow, hour, cnt } of data) matrix[dow][hour] = Number(cnt);
+  const max = Math.max(...matrix.flat(), 1);
+  const days = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
+  return (
+    <div className="overflow-x-auto">
+      <div className="min-w-[480px]">
+        <div className="mb-1 flex gap-0.5 pl-9">
+          {Array.from({ length: 24 }, (_, h) => (
+            <div key={h} className="flex-1 text-center text-[9px] text-gray-400">{h % 3 === 0 ? h : ""}</div>
+          ))}
+        </div>
+        {days.map((day, d) => (
+          <div key={d} className="mb-0.5 flex items-center gap-0.5">
+            <span className="w-8 shrink-0 text-right text-[10px] text-gray-500 pr-1">{day}</span>
+            {Array.from({ length: 24 }, (_, h) => {
+              const val = matrix[d][h];
+              const intensity = val / max;
+              return (
+                <div
+                  key={h}
+                  title={`${day} ${h}:00 — ${val} görüntüleme`}
+                  className="h-5 flex-1 rounded-sm"
+                  style={{ backgroundColor: intensity > 0 ? `rgba(0, 119, 182, ${0.1 + intensity * 0.9})` : "#f3f4f6" }}
+                />
+              );
+            })}
+          </div>
+        ))}
+        <div className="mt-2 flex items-center gap-1.5 justify-end">
+          <span className="text-[10px] text-gray-400">Az</span>
+          {[0.1, 0.3, 0.5, 0.7, 0.9].map((v) => (
+            <div key={v} className="h-3 w-3 rounded-sm" style={{ backgroundColor: `rgba(0, 119, 182, ${v})` }} />
+          ))}
+          <span className="text-[10px] text-gray-400">Çok</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Page Conversion Rate Chart ────────────────────────────────────────────────
+function PageConvChart({ data }: { data: { page: string; sessions: number; conversions: number; conv_rate: number }[] }) {
+  const max = Math.max(...data.map((r) => Number(r.sessions)), 1);
+  return (
+    <div className="space-y-2.5">
+      {data.map((r) => (
+        <div key={r.page} className="group flex items-center gap-3">
+          <span className="w-36 truncate text-right text-xs text-gray-500 transition-colors group-hover:text-gray-900">{r.page || "/"}</span>
+          <div className="flex-1">
+            <div className="h-5 overflow-hidden rounded-md bg-gray-100">
+              <div className="h-5 rounded-md bg-[#0077b6] transition-all" style={{ width: `${(Number(r.sessions) / max) * 100}%` }} />
+            </div>
+          </div>
+          <span className="w-8 text-right text-xs font-semibold text-gray-700">{r.sessions}</span>
+          <span className={`w-12 text-right text-xs font-semibold ${Number(r.conv_rate) > 0 ? "text-green-600" : "text-gray-300"}`}>
+            %{r.conv_rate ?? 0}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Returning vs New Visitors ─────────────────────────────────────────────────
+function ReturningChart({ data }: { data: { visitor_type: string; cnt: number }[] }) {
+  const total = data.reduce((s, r) => s + Number(r.cnt), 0) || 1;
+  const map: Record<string, { label: string; bar: string; badge: string }> = {
+    returning: { label: "Geri Dönen", bar: "bg-[#0077b6]", badge: "bg-blue-100 text-blue-700" },
+    new:       { label: "Yeni Ziyaretçi", bar: "bg-teal-500", badge: "bg-teal-100 text-teal-700" },
+  };
+  return (
+    <div className="space-y-3">
+      {data.map((row) => {
+        const pct = Math.round((Number(row.cnt) / total) * 100);
+        const c = map[row.visitor_type] ?? { label: row.visitor_type, bar: "bg-gray-400", badge: "bg-gray-100 text-gray-600" };
+        return (
+          <div key={row.visitor_type}>
+            <div className="mb-1.5 flex items-center justify-between">
+              <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${c.badge}`}>{c.label}</span>
+              <span className="text-sm font-semibold text-gray-900">
+                {pct}% <span className="text-xs font-normal text-gray-400">({Number(row.cnt).toLocaleString("tr-TR")})</span>
+              </span>
+            </div>
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+              <div className={`h-2.5 rounded-full transition-all ${c.bar}`} style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+        );
+      })}
+      {data.length === 0 && <p className="text-xs text-gray-400">Yeterli veri yok</p>}
+    </div>
+  );
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default async function AnalyticsDashboard({
   searchParams,
@@ -185,7 +330,7 @@ export default async function AnalyticsDashboard({
 }) {
   const params = await searchParams;
   const days = Math.min(Math.max(parseInt(params.days || "30", 10) || 30, 1), 90);
-  const { overview, topPages, devices, utmSources, countries, sessions, hourly } = await getStats(days);
+  const { overview, prevOverview, topPages, devices, utmSources, countries, sessions, hourly, heatmap, pageConv, returningStats } = await getStats(days);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -220,6 +365,14 @@ export default async function AnalyticsDashboard({
             phone: Number(overview.phone),
             wa: Number(overview.wa),
             form: Number(overview.form),
+          }}
+          prevOverview={{
+            pv_today: 0,
+            pv_period: Number(prevOverview.pv_period),
+            uniq_visitors: Number(prevOverview.uniq_visitors),
+            phone: Number(prevOverview.phone),
+            wa: Number(prevOverview.wa),
+            form: Number(prevOverview.form),
           }}
           sessions={sessions as Session[]}
           sparkline={hourly as { day: string; pv: number }[]}
@@ -263,6 +416,35 @@ export default async function AnalyticsDashboard({
           </div>
 
         </div>
+
+        {/* Heatmap */}
+        <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900">Trafik Isı Haritası</h2>
+            <span className="text-xs text-gray-400">Saate ve güne göre sayfa görüntüleme</span>
+          </div>
+          <p className="mb-4 text-xs text-gray-400">Türkiye saati (Europe/Istanbul)</p>
+          <HeatmapChart data={heatmap as { dow: number; hour: number; cnt: number }[]} />
+        </div>
+
+        {/* Page Conv Rate + Returning */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="mb-1 flex items-center justify-between">
+              <h2 className="font-semibold text-gray-900">Sayfaya Göre Dönüşüm</h2>
+              <div className="flex gap-3 text-xs text-gray-400">
+                <span>Oturum</span><span className="text-green-600">%Oran</span>
+              </div>
+            </div>
+            <p className="mb-4 text-xs text-gray-400">Giriş sayfası bazında dönüşüm oranı</p>
+            <PageConvChart data={pageConv as { page: string; sessions: number; conversions: number; conv_rate: number }[]} />
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 font-semibold text-gray-900">Yeni vs Geri Dönen Ziyaretçi</h2>
+            <ReturningChart data={returningStats as { visitor_type: string; cnt: number }[]} />
+          </div>
+        </div>
+
       </main>
     </div>
   );
