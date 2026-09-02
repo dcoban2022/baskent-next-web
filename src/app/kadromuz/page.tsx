@@ -23,7 +23,7 @@ const yonetim = [
   },
   {
     name: "Serdar Sipahi",
-    title: "Kurucu / Dil ve Konuşma Terapisti",
+    title: "Dil ve Konuşma Terapisti",
     spec: "Odyoloji ve Ses / Konuşma Bozuklukları",
     image: "/images/kadro/serdar-sipahi.jpg",
   },
@@ -132,7 +132,6 @@ const ogretmenler = [
 ];
 
 const diger = [
-  { name: "Yıldız Akyol", title: "Yardımcı Personel" },
   { name: "Hatun Pehlivan", title: "Yardımcı Personel" },
   { name: "Abdullah Kunduz", title: "Servis Personeli" },
   { name: "Serdar Baş", title: "Servis Personeli" },
