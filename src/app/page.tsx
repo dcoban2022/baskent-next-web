@@ -15,6 +15,7 @@ import FAQSchema from "@/components/FAQ/FAQSchema";
 import MapSection from "@/components/MapSection";
 import ServiceArea from "@/components/ServiceArea";
 import LatestArticles from "@/components/LatestArticles";
+import InstagramFeed from "@/components/InstagramFeed";
 import FamilyTestimonials from "@/components/FamilyTestimonials";
 import VideoGallery from "@/components/VideoGallery";
 import Contact from "@/components/Contact";
@@ -70,6 +71,7 @@ export default function Home() {
       <MapSection />
       <ServiceArea />
       <LatestArticles />
+      <InstagramFeed />
       <FamilyTestimonials />
       <VideoGallery />
       <Contact />

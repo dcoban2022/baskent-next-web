@@ -11,7 +11,7 @@ const images = [
   { src: "/images/slider/slide-5.webp", alt: "Terapi Seansı" },
   { src: "/images/slider/slide-2.webp", alt: "Bireysel Eğitim" },
   { src: "/images/slider/slide-3.webp", alt: "Değerlendirme Seansı" },
-  { src: "/images/slider/slide-1.webp", alt: "Motor Beceri Eğitimi" },
+  { src: "/images/slider/slide-1.webp", alt: "Bireysel Eğitim Seansı" },
 ];
 
 const stats = [
