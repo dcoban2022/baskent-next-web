@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const images = [
-  { src: "/images/services/oyun-terapisi.jpg", alt: "Oyun Terapisi Seansı", position: "center 75%" },
+  { src: "/images/services/oyun-terapisi.jpg", alt: "Oyun Terapisi Seansı", position: "center 92%" },
   { src: "/images/slider/slide-2.webp", alt: "Bireysel Eğitim" },
   { src: "/images/slider/slide-3.webp", alt: "Değerlendirme Seansı" },
   { src: "/images/slider/slide-1.webp", alt: "Bireysel Eğitim Seansı" },
