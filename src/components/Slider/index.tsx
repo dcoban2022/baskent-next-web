@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const images = [
-  { src: "/images/services/oyun-terapisi.jpg", alt: "Oyun Terapisi Seansı" },
+  { src: "/images/services/oyun-terapisi.jpg", alt: "Oyun Terapisi Seansı", position: "center 75%" },
   { src: "/images/slider/slide-2.webp", alt: "Bireysel Eğitim" },
   { src: "/images/slider/slide-3.webp", alt: "Değerlendirme Seansı" },
   { src: "/images/slider/slide-1.webp", alt: "Bireysel Eğitim Seansı" },
@@ -94,6 +94,7 @@ const Hero = () => {
                         alt={img.alt}
                         fill
                         className="object-cover"
+                        style={{ objectPosition: img.position ?? "center" }}
                         priority={i === 0}
                       />
                     </SwiperSlide>
